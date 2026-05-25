@@ -63,9 +63,8 @@ jobs:
           import os
           from pathlib import Path
 
-          default_worker_base_url = "https://xhs-media-toolkit.zscagame.workers.dev"
           config = {
-              "workerBaseUrl": os.environ.get("WORKER_BASE_URL") or default_worker_base_url
+              "workerBaseUrl": os.environ.get("WORKER_BASE_URL") or ""
           }
           Path("public/config.js").write_text(
               "window.XHS_MEDIA_TOOLKIT_CONFIG = "

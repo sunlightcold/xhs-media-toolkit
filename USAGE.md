@@ -7,8 +7,6 @@
 
 请只用于你有权访问和保存的内容。这个 Worker 只读取公开页面响应里已有的媒体元数据，不绕过登录、验证码、权限控制或付费墙。
 
-在线演示页：[https://sunlightcold.github.io/xhs-media-toolkit/](https://sunlightcold.github.io/xhs-media-toolkit/)
-
 ## 1. Worker 地址
 
 本文示例用 `<WORKER_BASE>` 代表你的 Worker 地址。本地开发时通常是：
@@ -23,7 +21,7 @@
 
 ```toml
 [vars]
-ALLOWED_ORIGINS = "https://sunlightcold.github.io,http://127.0.0.1:8787,http://localhost:8787"
+ALLOWED_ORIGINS = "https://<your-pages-origin>,http://127.0.0.1:8787,http://localhost:8787"
 ```
 
 需要新增域名时，修改 `wrangler.toml` 的 `ALLOWED_ORIGINS`，使用英文逗号分隔。删除或留空 `ALLOWED_ORIGINS` 时不会开放所有 Origin，只会保留同源浏览器请求。CORS 不是完整鉴权方案，如果 Worker 被公开部署，仍建议结合 Cloudflare WAF、速率限制或额外鉴权做更强防护。
@@ -206,9 +204,7 @@ pnpm run demo
 
 仓库已提供 GitHub Actions 配置：`.github/workflows/pages.yml`。它会发布 `public/` 目录作为 GitHub Pages 演示页。
 
-GitHub Pages 只负责部署静态演示页，不会部署 Cloudflare Worker。可以通过仓库变量 `WORKER_BASE_URL` 给页面注入默认 Worker 地址；如果没有配置，页面会使用仓库内的默认 Worker 地址。
-
-当前演示页地址：[https://sunlightcold.github.io/xhs-media-toolkit/](https://sunlightcold.github.io/xhs-media-toolkit/)
+GitHub Pages 只负责部署静态演示页，不会部署 Cloudflare Worker。可以通过仓库变量 `WORKER_BASE_URL` 给页面注入默认 Worker 地址；如果没有配置，页面会要求使用者手动填写 Worker 地址。
 
 首次使用时，需要在 GitHub 仓库设置中启用 Pages，并将构建来源选择为 `GitHub Actions`：
 
@@ -226,13 +222,13 @@ Name: WORKER_BASE_URL
 Value: https://<your-worker-domain>
 ```
 
-修改变量后，重新运行 `Pages` 工作流即可生效。Worker 也需要把 Pages 所在 Origin 加入 `ALLOWED_ORIGINS`，例如 `https://sunlightcold.github.io`。
+修改变量后，重新运行 `Pages` 工作流即可生效。Worker 也需要把 Pages 所在 Origin 加入 `ALLOWED_ORIGINS`，例如 `https://<your-pages-origin>`。
 
 提交代码仍然使用：
 
 ```powershell
 git add .
-git commit -m "chore: update project"
+git commit -m "chore: initial commit"
 git push origin main
 ```
 

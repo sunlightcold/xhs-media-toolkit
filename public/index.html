@@ -3,7 +3,30 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>xhs-media-toolkit 演示页</title>
+    <meta
+      name="description"
+      content="xhs-media-toolkit 是用于从小红书公开页面提取无水印原图和视频资源的开源工具，支持 Cloudflare Worker、CLI 和受限媒体代理。"
+    />
+    <meta
+      name="keywords"
+      content="小红书原图提取,小红书视频提取,小红书无水印,xhs-media-toolkit,Cloudflare Worker"
+    />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="xhs-media-toolkit" />
+    <meta property="og:title" content="xhs-media-toolkit | 小红书原图与视频资源提取工具" />
+    <meta
+      property="og:description"
+      content="从小红书公开页面提取无水印原图和视频资源，支持 Cloudflare Worker、CLI 和受限媒体代理。"
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="xhs-media-toolkit | 小红书原图与视频资源提取工具" />
+    <meta
+      name="twitter:description"
+      content="从小红书公开页面提取无水印原图和视频资源，支持 Cloudflare Worker、CLI 和受限媒体代理。"
+    />
+    <title>xhs-media-toolkit | 小红书原图与视频资源提取工具</title>
     <style>
       :root {
         --bg: #10130f;
@@ -158,20 +181,12 @@
       }
 
       h1 {
-        max-width: 720px;
+        max-width: 600px;
         margin: 0;
         color: #fff9e7;
-        font-size: clamp(38px, 5.35vw, 72px);
-        line-height: 0.94;
-        letter-spacing: -0.055em;
-      }
-
-      .lead {
-        max-width: 650px;
-        margin: 0;
-        color: rgb(255 248 220 / 72%);
-        font-size: clamp(17px, 2.2vw, 22px);
-        line-height: 1.72;
+        font-size: clamp(34px, 4.1vw, 54px);
+        line-height: 1.04;
+        letter-spacing: -0.045em;
       }
 
       .stats {
@@ -526,6 +541,18 @@
     </style>
   </head>
   <body>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "xhs-media-toolkit",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Cloudflare Workers, Node.js",
+        "description": "用于从小红书公开页面提取无水印原图和视频资源的开源工具，支持 Cloudflare Worker、CLI 和受限媒体代理。",
+        "codeRepository": "https://github.com/sunlightcold/xhs-media-toolkit",
+        "license": "https://github.com/sunlightcold/xhs-media-toolkit/blob/main/LICENSE"
+      }
+    </script>
     <main class="shell">
       <nav class="nav" aria-label="页面导航">
         <a class="brand" href="https://github.com/sunlightcold/xhs-media-toolkit" rel="noreferrer">
@@ -545,10 +572,6 @@
         <div class="copy">
           <span class="eyebrow">public media metadata extractor</span>
           <h1>提取小红书公开页面里的原图与视频资源。</h1>
-          <p class="lead">
-            粘贴分享文本或笔记 URL，调用你的 Cloudflare Worker
-            解析公开页面响应中已经存在的媒体元数据， 并通过受限代理预览、复制和下载资源。
-          </p>
 
           <div class="stats" aria-label="能力概览">
             <div class="stat">

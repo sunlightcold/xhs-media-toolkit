@@ -4,8 +4,6 @@
 
 本项目有明确边界：不绕过登录、验证码、付费墙、权限控制、风控或任何私有内容边界。请只用于你有权访问和保存的内容。
 
-在线演示页：[https://sunlightcold.github.io/xhs-media-toolkit/](https://sunlightcold.github.io/xhs-media-toolkit/)
-
 ## 功能
 
 - 从小红书分享文本、`xhslink.com` 短链或 `www.xiaohongshu.com` 笔记 URL 中提取媒体地址。
@@ -53,7 +51,7 @@ pnpm run extract -- "标题 http://xhslink.com/o/abc123 复制后打开【小红
 pnpm run demo
 ```
 
-GitHub Pages 演示页会发布 `public/` 目录，当前地址是 [https://sunlightcold.github.io/xhs-media-toolkit/](https://sunlightcold.github.io/xhs-media-toolkit/)。Pages 只托管静态演示页，不部署 Worker；可以通过仓库变量 `WORKER_BASE_URL` 给页面注入默认 Worker 地址。
+GitHub Pages 演示页会发布 `public/` 目录。Pages 只托管静态演示页，不部署 Worker；可以通过仓库变量 `WORKER_BASE_URL` 给页面注入默认 Worker 地址。
 
 ## Worker 本地开发
 
@@ -127,7 +125,7 @@ Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:8787/extract" -ContentType
 
 ```toml
 [vars]
-ALLOWED_ORIGINS = "https://sunlightcold.github.io,http://127.0.0.1:8787,http://localhost:8787,https://example.com"
+ALLOWED_ORIGINS = "https://<your-pages-origin>,http://127.0.0.1:8787,http://localhost:8787"
 ```
 
 CORS 只能防止普通浏览器页面直接跨域调用你的 Worker，不能阻止服务端脚本、命令行或恶意代理转发请求。如果要做更强的滥用防护，请结合 Cloudflare WAF、速率限制或额外鉴权。
