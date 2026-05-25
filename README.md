@@ -123,14 +123,14 @@ Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:8787/extract" -ContentType
 
 ## 配置
 
-默认不限制浏览器跨域访问，会回传 `Access-Control-Allow-Origin: *`。如果需要限制调用来源，可以在 `wrangler.toml` 或 Cloudflare Worker 环境变量中配置 `ALLOWED_ORIGINS`，多个 Origin 使用英文逗号分隔。
+默认只允许同源浏览器请求，不会对任意跨域页面回传 `Access-Control-Allow-Origin`。如果需要让 GitHub Pages、本地演示页或自己的站点调用 Worker，需要在 `wrangler.toml` 或 Cloudflare Worker 环境变量中配置 `ALLOWED_ORIGINS`，多个 Origin 使用英文逗号分隔。
 
 ```toml
 [vars]
-ALLOWED_ORIGINS = "http://localhost:3000,http://127.0.0.1:3000,https://example.com"
+ALLOWED_ORIGINS = "https://sunlightcold.github.io,http://127.0.0.1:8787,http://localhost:8787,https://example.com"
 ```
 
-不配置 `ALLOWED_ORIGINS` 时等同于开放所有 Origin。正式环境如需限制来源，请使用明确的 Origin 白名单。
+CORS 只能防止普通浏览器页面直接跨域调用你的 Worker，不能阻止服务端脚本、命令行或恶意代理转发请求。如果要做更强的滥用防护，请结合 Cloudflare WAF、速率限制或额外鉴权。
 
 ## 质量检查
 

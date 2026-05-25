@@ -13,7 +13,7 @@ interface CorsEnv {
 export function createCorsHeaders(request: Request, env: CorsEnv = {}): Headers {
   const headers = new Headers(BASE_CORS_HEADERS);
   const origin = request.headers.get("Origin");
-  const allowedOrigins = resolveAllowedOrigins(env.ALLOWED_ORIGINS);
+  const allowedOrigins = resolveAllowedOrigins(request, env.ALLOWED_ORIGINS);
 
   if (!origin) {
     return headers;
@@ -56,15 +56,16 @@ export function withCors(response: Response, corsHeaders: Headers): Response {
   });
 }
 
-function resolveAllowedOrigins(configuredOrigins: string | undefined): string[] {
-  if (!configuredOrigins?.trim()) {
-    return ["*"];
-  }
+function resolveAllowedOrigins(request: Request, configuredOrigins: string | undefined): string[] {
+  const requestOrigin = new URL(request.url).origin;
+  const configured = configuredOrigins?.trim()
+    ? configuredOrigins
+        .split(",")
+        .map((origin) => normalizeOrigin(origin))
+        .filter((origin): origin is string => origin.length > 0)
+    : [];
 
-  return configuredOrigins
-    .split(",")
-    .map((origin) => normalizeOrigin(origin))
-    .filter((origin): origin is string => origin.length > 0);
+  return [requestOrigin, ...configured];
 }
 
 function isOriginAllowed(origin: string, allowedOrigins: string[]): boolean {
