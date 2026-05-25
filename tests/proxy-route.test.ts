@@ -52,6 +52,25 @@ describe("handleProxyRequest", () => {
     expect(fetchImpl.mock.calls[0]?.[0]).toBe("https://sns-video-bd.xhscdn.com/video.mp4");
   });
 
+  it("proxies Xiaohongshu backup video CDN hosts", async () => {
+    const fetchImpl = vi.fn<typeof fetch>().mockResolvedValue(
+      new Response("media", {
+        status: 206,
+        headers: {
+          "Content-Range": "bytes 0-3/10",
+        },
+      }),
+    );
+    const target = encodeURIComponent("https://sns-bak-v10.xhscdn.com/video.mp4");
+    const request = new Request(`https://worker.example/proxy?u=${target}`);
+
+    const response = await handleProxyRequest(request, new URL(request.url), { fetchImpl });
+
+    expect(response.status).toBe(206);
+    expect(response.headers.get("Content-Type")).toBe("video/mp4");
+    expect(fetchImpl.mock.calls[0]?.[0]).toBe("https://sns-bak-v10.xhscdn.com/video.mp4");
+  });
+
   it("rejects HTTP URLs on unsupported hosts", async () => {
     const response = await handleProxyRequest(
       new Request("https://worker.example/proxy?u=http%3A%2F%2Fexample.com%2Fimage.jpg"),

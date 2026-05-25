@@ -108,6 +108,7 @@ Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:8787/extract" -ContentType
 
 - `ci.xiaohongshu.com`
 - `sns-video-*.xhscdn.com`
+- `sns-bak-v*.xhscdn.com`
 
 示例：
 

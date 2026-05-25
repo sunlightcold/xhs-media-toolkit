@@ -2,7 +2,7 @@ import { errorResponse } from "../http/responses.js";
 
 const PROXY_SOURCE = "xhs-media-toolkit";
 const ALLOWED_IMAGE_HOST = "ci.xiaohongshu.com";
-const ALLOWED_VIDEO_HOST_RE = /^sns-video-[a-z0-9-]+\.xhscdn\.com$/;
+const ALLOWED_VIDEO_HOST_RE = /^(?:sns-video-[a-z0-9-]+|sns-bak-v\d+)\.xhscdn\.com$/;
 const XHS_PUBLIC_REFERER = "https://www.xiaohongshu.com/";
 const MAX_PROXY_REDIRECTS = 5;
 
@@ -218,7 +218,7 @@ function resolveMediaContentType(contentType: string | null, targetUrl: URL): st
 
   if (
     pathname.endsWith(".mp4") ||
-    (targetUrl.hostname.startsWith("sns-video-") &&
+    (ALLOWED_VIDEO_HOST_RE.test(targetUrl.hostname) &&
       (!normalizedContentType || normalizedContentType.startsWith("text/plain")))
   ) {
     return "video/mp4";
