@@ -204,7 +204,7 @@ pnpm run demo
 
 仓库已提供 GitHub Actions 配置：`.github/workflows/pages.yml`。它会发布 `public/` 目录作为 GitHub Pages 演示页。
 
-GitHub Pages 只负责部署静态演示页，不会部署 Cloudflare Worker。可以通过仓库变量 `WORKER_BASE_URL` 给页面注入默认 Worker 地址；如果没有配置，页面会要求使用者手动填写 Worker 地址。
+GitHub Pages 只负责部署静态演示页，不会部署 Cloudflare Worker。可以通过仓库变量 `WORKER_BASE_URL` 给页面注入默认 Worker 地址；如果没有配置，页面会使用项目提供的测试 Worker 地址，方便用户直接体验。
 
 首次使用时，需要在 GitHub 仓库设置中启用 Pages，并将构建来源选择为 `GitHub Actions`：
 
