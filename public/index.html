@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="xhs-media-toolkit 是用于从小红书公开页面提取无水印原图和视频资源的开源工具，支持 Cloudflare Worker、CLI 和受限媒体代理。"
+      content="轻松无水印保存喜欢的小红书图文、视频、实况Live图，超高清分辨率。无需登录，支持视频、图片、实况Live图。"
     />
     <meta
       name="keywords"
@@ -18,13 +18,13 @@
     <meta property="og:title" content="xhs-media-toolkit | 小红书原图与视频资源提取工具" />
     <meta
       property="og:description"
-      content="从小红书公开页面提取无水印原图和视频资源，支持 Cloudflare Worker、CLI 和受限媒体代理。"
+      content="轻松无水印保存喜欢的小红书图文、视频、实况Live图，超高清分辨率。无需登录，支持视频、图片、实况Live图。"
     />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="xhs-media-toolkit | 小红书原图与视频资源提取工具" />
     <meta
       name="twitter:description"
-      content="从小红书公开页面提取无水印原图和视频资源，支持 Cloudflare Worker、CLI 和受限媒体代理。"
+      content="轻松无水印保存喜欢的小红书图文、视频、实况Live图，超高清分辨率。无需登录，支持视频、图片、实况Live图。"
     />
     <title>xhs-media-toolkit | 小红书原图与视频资源提取工具</title>
     <style>
@@ -164,6 +164,24 @@
         margin: 5px 0 0;
         color: var(--muted);
         font-size: 14px;
+      }
+
+      .brand-points {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .brand-points span {
+        min-height: 28px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 5px 9px;
+        color: var(--foreground);
+        background: var(--surface-2);
+        font-size: 12px;
+        font-weight: 800;
       }
 
       .top-actions {
@@ -791,7 +809,7 @@
         "name": "xhs-media-toolkit",
         "applicationCategory": "DeveloperApplication",
         "operatingSystem": "Cloudflare Workers, Node.js",
-        "description": "用于从小红书公开页面提取无水印原图和视频资源的开源工具，支持 Cloudflare Worker、CLI 和受限媒体代理。",
+        "description": "轻松无水印保存喜欢的小红书图文、视频、实况Live图，超高清分辨率。无需登录，支持视频、图片、实况Live图。",
         "codeRepository": "https://github.com/sunlightcold/xhs-media-toolkit",
         "license": "https://github.com/sunlightcold/xhs-media-toolkit/blob/main/LICENSE"
       }
@@ -802,7 +820,12 @@
           <span class="brand-mark" aria-hidden="true">X</span>
           <div class="brand-copy">
             <h1>小红书媒体提取工作台</h1>
-            <p>面向公开笔记的原图、视频资源解析与批量下载。</p>
+            <p>轻松无水印保存喜欢的小红书图文、视频、实况Live图，超高清分辨率。</p>
+            <div class="brand-points" aria-label="核心能力">
+              <span>无需登录</span>
+              <span>超高清</span>
+              <span>支持视频、图片、实况Live图</span>
+            </div>
           </div>
         </div>
         <div class="top-actions">
