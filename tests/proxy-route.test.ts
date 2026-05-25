@@ -33,17 +33,36 @@ describe("handleProxyRequest", () => {
     await expect(response.json()).resolves.toEqual({ error: "Host not allowed" });
   });
 
-  it("rejects non-HTTPS media URLs", async () => {
+  it("upgrades allowed HTTP media URLs to HTTPS before proxying", async () => {
+    const fetchImpl = vi.fn<typeof fetch>().mockResolvedValue(
+      new Response("media", {
+        status: 206,
+        headers: {
+          "Content-Type": "video/mp4",
+          "Content-Range": "bytes 0-3/10",
+        },
+      }),
+    );
+    const target = encodeURIComponent("http://sns-video-bd.xhscdn.com/video.mp4");
+    const request = new Request(`https://worker.example/proxy?u=${target}`);
+
+    const response = await handleProxyRequest(request, new URL(request.url), { fetchImpl });
+
+    expect(response.status).toBe(206);
+    expect(fetchImpl.mock.calls[0]?.[0]).toBe("https://sns-video-bd.xhscdn.com/video.mp4");
+  });
+
+  it("rejects HTTP URLs on unsupported hosts", async () => {
     const response = await handleProxyRequest(
-      new Request("https://worker.example/proxy?u=http%3A%2F%2Fci.xiaohongshu.com%2Fimage.jpg"),
-      new URL("https://worker.example/proxy?u=http%3A%2F%2Fci.xiaohongshu.com%2Fimage.jpg"),
+      new Request("https://worker.example/proxy?u=http%3A%2F%2Fexample.com%2Fimage.jpg"),
+      new URL("https://worker.example/proxy?u=http%3A%2F%2Fexample.com%2Fimage.jpg"),
     );
 
     expect(response.status).toBe(403);
     await expect(response.json()).resolves.toEqual({ error: "Host not allowed" });
   });
 
-  it("proxies allowed media hosts and forwards Range without Referer", async () => {
+  it("proxies allowed media hosts and forwards Range with a fixed Xiaohongshu Referer", async () => {
     const fetchImpl = vi.fn<typeof fetch>().mockResolvedValue(
       new Response("media", {
         status: 206,
@@ -71,7 +90,9 @@ describe("handleProxyRequest", () => {
     const [, init] = fetchImpl.mock.calls[0]!;
     const headers = new Headers(init?.headers);
     expect(headers.get("Range")).toBe("bytes=0-3");
-    expect(headers.has("Referer")).toBe(false);
+    expect(headers.get("Referer")).toBe("https://www.xiaohongshu.com/");
+    expect(headers.get("Origin")).toBe("https://www.xiaohongshu.com");
+    expect(headers.get("Referer")).not.toBe("https://site.example/private");
   });
 
   it("follows redirects only when the redirected media host is allowed", async () => {
@@ -101,6 +122,69 @@ describe("handleProxyRequest", () => {
     expect(response.status).toBe(200);
     expect(fetchImpl).toHaveBeenCalledTimes(2);
     expect(fetchImpl.mock.calls[1]?.[0]).toBe("https://sns-video-bd.xhscdn.com/redirected.mp4");
+  });
+
+  it("adds a playable video content type when upstream omits it", async () => {
+    const fetchImpl = vi
+      .fn<typeof fetch>()
+      .mockResolvedValue(new Response("media", { status: 200 }));
+    const target = encodeURIComponent("https://sns-video-bd.xhscdn.com/video-token");
+    const request = new Request(`https://worker.example/proxy?u=${target}`);
+
+    const response = await handleProxyRequest(request, new URL(request.url), { fetchImpl });
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("Content-Type")).toBe("video/mp4");
+    expect(response.headers.get("Content-Disposition")).toBe("inline");
+  });
+
+  it("adds an open-ended Range request for video downloads", async () => {
+    const fetchImpl = vi.fn<typeof fetch>().mockResolvedValue(
+      new Response("media", {
+        status: 206,
+        headers: {
+          "Content-Type": "video/mp4",
+          "Content-Range": "bytes 0-4/5",
+        },
+      }),
+    );
+    const target = encodeURIComponent("https://sns-video-bd.xhscdn.com/video.mp4");
+    const request = new Request(`https://worker.example/proxy?u=${target}`);
+
+    const response = await handleProxyRequest(request, new URL(request.url), { fetchImpl });
+
+    expect(response.status).toBe(206);
+    const [, init] = fetchImpl.mock.calls[0]!;
+    expect(new Headers(init?.headers).get("Range")).toBe("bytes=0-");
+  });
+
+  it("retries video requests with fallback headers when the CDN rejects the first profile", async () => {
+    const fetchImpl = vi
+      .fn<typeof fetch>()
+      .mockResolvedValueOnce(new Response("blocked", { status: 403 }))
+      .mockResolvedValueOnce(
+        new Response("media", {
+          status: 206,
+          headers: {
+            "Content-Type": "video/mp4",
+            "Content-Range": "bytes 0-4/5",
+          },
+        }),
+      );
+    const target = encodeURIComponent("https://sns-video-bd.xhscdn.com/video.mp4");
+    const request = new Request(`https://worker.example/proxy?u=${target}`);
+
+    const response = await handleProxyRequest(request, new URL(request.url), { fetchImpl });
+
+    expect(response.status).toBe(206);
+    expect(fetchImpl).toHaveBeenCalledTimes(2);
+
+    const firstHeaders = new Headers(fetchImpl.mock.calls[0]?.[1]?.headers);
+    const secondHeaders = new Headers(fetchImpl.mock.calls[1]?.[1]?.headers);
+    expect(firstHeaders.get("Origin")).toBe("https://www.xiaohongshu.com");
+    expect(firstHeaders.get("Referer")).toBe("https://www.xiaohongshu.com/");
+    expect(secondHeaders.has("Origin")).toBe(false);
+    expect(secondHeaders.get("Referer")).toBe("https://www.xiaohongshu.com/");
   });
 
   it("rejects redirects to unsupported media hosts", async () => {

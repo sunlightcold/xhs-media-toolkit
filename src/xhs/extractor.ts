@@ -52,6 +52,7 @@ export interface ExtractOptions {
 interface StreamEntry {
   masterUrl?: unknown;
   url?: unknown;
+  backupUrls?: unknown;
 }
 
 export async function extractOriginalUrlsFromShareText(
@@ -286,16 +287,33 @@ export function inferMediaFileFormat(
 }
 
 function createMediaItem(item: Omit<MediaItem, "format" | "filenameExtension">): MediaItem {
-  const format = inferMediaFileFormat(item.rawUrl, item.url);
+  const normalizedItem = {
+    ...item,
+    url: normalizeMediaUrlProtocol(item.url),
+    rawUrl: item.rawUrl ? normalizeMediaUrlProtocol(item.rawUrl) : item.rawUrl,
+  };
+  const format = inferMediaFileFormat(normalizedItem.rawUrl, normalizedItem.url);
   if (!format) {
-    return item;
+    return normalizedItem;
   }
 
   return {
-    ...item,
+    ...normalizedItem,
     format,
     filenameExtension: toFilenameExtension(format),
   };
+}
+
+function normalizeMediaUrlProtocol(url: string): string {
+  const parsed = tryParseUrl(url);
+  if (!parsed || parsed.protocol !== "http:") return url;
+
+  if (parsed.hostname === "ci.xiaohongshu.com" || parsed.hostname.endsWith(".xhscdn.com")) {
+    parsed.protocol = "https:";
+    return parsed.toString();
+  }
+
+  return url;
 }
 
 function inferMediaFileFormatFromUrl(url: string | null | undefined): MediaFileFormat | null {
@@ -527,12 +545,28 @@ function extractLivePhotoVideoUrl(image: JsonRecord): string | null {
 
 function extractFirstStreamUrl(streamArray: unknown): string | null {
   if (!Array.isArray(streamArray)) return null;
+  const candidates: string[] = [];
+
   for (const entry of streamArray) {
-    if (typeof entry === "string" && entry.startsWith("http")) return entry;
-    if (isStreamEntry(entry) && typeof entry.masterUrl === "string") return entry.masterUrl;
-    if (isStreamEntry(entry) && typeof entry.url === "string") return entry.url;
+    if (typeof entry === "string" && entry.startsWith("http")) {
+      candidates.push(entry);
+      continue;
+    }
+
+    if (!isStreamEntry(entry)) continue;
+    if (typeof entry.url === "string") candidates.push(entry.url);
+    if (Array.isArray(entry.backupUrls)) {
+      candidates.push(...entry.backupUrls.filter(isString));
+    }
+    if (typeof entry.masterUrl === "string") candidates.push(entry.masterUrl);
   }
-  return null;
+
+  return candidates.find(isBrowserPlayableVideoUrl) || candidates[0] || null;
+}
+
+function isBrowserPlayableVideoUrl(url: string): boolean {
+  const format = inferMediaFileFormatFromUrl(url);
+  return format === "mp4" || format === "mov" || !/\.m3u8(?:[/?#:]|$)/i.test(url);
 }
 
 function tryParseUrl(url: string): URL | null {

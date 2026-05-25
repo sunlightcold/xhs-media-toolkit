@@ -3,7 +3,7 @@
 这个 Worker 提供两个接口：
 
 - `/extract`：从小红书分享文本或笔记 URL 中提取媒体原始地址。
-- `/proxy`：代理受限的小红书图片和视频媒体域名，避免你的网页 Referer 暴露给上游 CDN。
+- `/proxy`：代理受限的小红书图片和视频媒体域名，避免你的网页 Referer 暴露给上游 CDN；上游请求只使用固定的小红书公开来源头。
 
 请只用于你有权访问和保存的内容。这个 Worker 只读取公开页面响应里已有的媒体元数据，不绕过登录、验证码、权限控制或付费墙。
 
@@ -129,7 +129,7 @@ GET /proxy?u=<URL_ENCODED_MEDIA_URL>
 - `ci.xiaohongshu.com`
 - `sns-video-*.xhscdn.com`
 
-视频播放通常会发送 `Range` 请求头，Worker 会转发该头，并在 CORS 中允许 `Range`。
+视频播放通常会发送 `Range` 请求头，Worker 会转发该头，并在 CORS 中允许 `Range`。下载按钮这类无 `Range` 的视频请求会自动补 `Range: bytes=0-`，减少 CDN 返回 403 的情况。
 
 HTML 示例：
 

@@ -9,7 +9,7 @@
 - 从小红书分享文本、`xhslink.com` 短链或 `www.xiaohongshu.com` 笔记 URL 中提取媒体地址。
 - 返回结构化的 `mediaItems`，包含媒体类型、来源、推断格式和文件扩展名。
 - 提供受限的 `/proxy` 接口，只代理允许的小红书图片和视频媒体域名。
-- 代理媒体时不向上游 CDN 转发你的网站 `Referer`。
+- 代理媒体时不向上游 CDN 转发你的网站 `Referer`，只使用固定的小红书公开来源头。
 - 页面请求和重定向只允许小红书相关页面域名。
 - 支持本地 CLI 调试和 Cloudflare Worker 部署。
 
@@ -118,6 +118,8 @@ Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:8787/extract" -ContentType
   alt=""
 />
 ```
+
+视频代理会转发浏览器的 `Range` 请求；当下载按钮发起无 `Range` 请求时，Worker 会为视频补 `Range: bytes=0-`，以匹配 CDN 常见的媒体访问方式。
 
 ## 配置
 

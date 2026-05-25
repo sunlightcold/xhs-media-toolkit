@@ -135,6 +135,40 @@ describe("media extraction", () => {
     ]);
   });
 
+  it("prefers browser-playable MP4 streams over HLS master playlists", () => {
+    const items = extractMediaItemsFromNote({
+      video: {
+        media: {
+          stream: {
+            h264: [
+              {
+                masterUrl: "https://sns-video-bd.xhscdn.com/video.m3u8",
+                url: "https://sns-video-bd.xhscdn.com/video.mp4",
+              },
+            ],
+          },
+        },
+      },
+    });
+
+    expect(items[0]?.url).toBe("https://sns-video-bd.xhscdn.com/video.mp4");
+    expect(items[0]?.format).toBe("mp4");
+  });
+
+  it("upgrades extracted Xiaohongshu media URLs from HTTP to HTTPS", () => {
+    const items = extractMediaItemsFromNote({
+      video: {
+        media: {
+          stream: {
+            h264: [{ url: "http://sns-video-bd.xhscdn.com/video.mp4?sign=abc" }],
+          },
+        },
+      },
+    });
+
+    expect(items[0]?.url).toBe("https://sns-video-bd.xhscdn.com/video.mp4?sign=abc");
+  });
+
   it("infers common image and video formats from URLs", () => {
     expect(inferMediaFileFormat("https://example.com/a.webp")).toBe("webp");
     expect(inferMediaFileFormat("https://example.com/video.mp4?token=1")).toBe("mp4");

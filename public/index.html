@@ -29,24 +29,24 @@
     <title>xhs-media-toolkit | 小红书原图与视频资源提取工具</title>
     <style>
       :root {
-        color-scheme: dark;
-        --background: #070b12;
-        --surface: #0c111d;
-        --surface-2: #111827;
-        --surface-3: #172033;
-        --foreground: #f8fafc;
-        --muted: #9ca3af;
+        color-scheme: light;
+        --background: #f8fafc;
+        --surface: #ffffff;
+        --surface-2: #f8fafc;
+        --surface-3: #eef6ff;
+        --foreground: #0f172a;
+        --muted: #475569;
         --subtle: #64748b;
-        --border: #253044;
-        --border-strong: #334155;
-        --primary: #22c55e;
-        --primary-strong: #16a34a;
-        --primary-soft: rgb(34 197 94 / 14%);
+        --border: #dbe3ef;
+        --border-strong: #b8c4d6;
+        --primary: #e11d48;
+        --primary-strong: #be123c;
+        --primary-soft: rgb(225 29 72 / 10%);
         --warning: #f59e0b;
-        --danger: #ef4444;
-        --danger-soft: rgb(239 68 68 / 13%);
-        --info: #38bdf8;
-        --shadow: 0 20px 60px rgb(0 0 0 / 28%);
+        --danger: #dc2626;
+        --danger-soft: rgb(220 38 38 / 9%);
+        --info: #2563eb;
+        --shadow: 0 16px 42px rgb(15 23 42 / 9%);
         --radius: 8px;
       }
 
@@ -62,9 +62,7 @@
         margin: 0;
         min-height: 100vh;
         color: var(--foreground);
-        background:
-          linear-gradient(180deg, rgb(56 189 248 / 8%), transparent 360px),
-          linear-gradient(135deg, #070b12 0%, #0b1220 48%, #111827 100%);
+        background: linear-gradient(180deg, #fff7f8 0, var(--background) 360px);
         font:
           15px/1.55 Inter,
           "Fira Sans",
@@ -75,19 +73,6 @@
           BlinkMacSystemFont,
           "Segoe UI",
           sans-serif;
-      }
-
-      body::before {
-        position: fixed;
-        inset: 0;
-        z-index: -1;
-        pointer-events: none;
-        content: "";
-        background-image:
-          linear-gradient(rgb(148 163 184 / 6%) 1px, transparent 1px),
-          linear-gradient(90deg, rgb(148 163 184 / 6%) 1px, transparent 1px);
-        background-size: 40px 40px;
-        mask-image: linear-gradient(to bottom, black 0, transparent 72%);
       }
 
       button,
@@ -114,7 +99,7 @@
         transform: translateY(-140%);
         border-radius: var(--radius);
         padding: 10px 12px;
-        color: #04130a;
+        color: #ffffff;
         background: var(--primary);
         text-decoration: none;
         font-weight: 800;
@@ -151,11 +136,11 @@
         height: 40px;
         flex: 0 0 auto;
         place-items: center;
-        border: 1px solid rgb(34 197 94 / 42%);
+        border: 1px solid rgb(225 29 72 / 28%);
         border-radius: var(--radius);
-        color: #04130a;
-        background: linear-gradient(135deg, #86efac, var(--primary));
-        box-shadow: 0 0 30px rgb(34 197 94 / 18%);
+        color: #ffffff;
+        background: linear-gradient(135deg, #fb7185, var(--primary));
+        box-shadow: 0 10px 28px rgb(225 29 72 / 20%);
         font:
           900 18px/1 "Fira Code",
           "SFMono-Regular",
@@ -193,12 +178,14 @@
         grid-template-columns: minmax(360px, 0.42fr) minmax(0, 1fr);
         gap: 16px;
         align-items: start;
+        min-width: 0;
       }
 
       .panel {
+        min-width: 0;
         border: 1px solid var(--border);
         border-radius: var(--radius);
-        background: rgb(12 17 29 / 86%);
+        background: var(--surface);
         box-shadow: var(--shadow);
       }
 
@@ -279,7 +266,7 @@
 
       label,
       .label {
-        color: #e5e7eb;
+        color: var(--foreground);
         font-size: 13px;
         font-weight: 800;
       }
@@ -296,7 +283,7 @@
         border: 1px solid var(--border-strong);
         border-radius: var(--radius);
         color: var(--foreground);
-        background: #080d16;
+        background: #ffffff;
         outline: none;
         transition:
           border-color 160ms ease,
@@ -332,13 +319,13 @@
 
       textarea::placeholder,
       input::placeholder {
-        color: #64748b;
+        color: #94a3b8;
       }
 
       .advanced {
         border: 1px solid var(--border);
         border-radius: var(--radius);
-        background: rgb(17 24 39 / 52%);
+        background: var(--surface-2);
       }
 
       .advanced summary {
@@ -390,12 +377,12 @@
       }
 
       .button.primary {
-        color: #03120a;
+        color: #ffffff;
         background: var(--primary);
       }
 
       .button.primary:hover {
-        background: #4ade80;
+        background: var(--primary-strong);
       }
 
       .button.secondary {
@@ -411,7 +398,7 @@
       }
 
       .button.danger {
-        color: #fecaca;
+        color: #991b1b;
         border-color: rgb(239 68 68 / 35%);
         background: var(--danger-soft);
       }
@@ -426,8 +413,8 @@
         display: none;
         width: 14px;
         height: 14px;
-        border: 2px solid rgb(3 18 10 / 26%);
-        border-top-color: #03120a;
+        border: 2px solid rgb(255 255 255 / 45%);
+        border-top-color: #ffffff;
         border-radius: 999px;
         animation: spin 800ms linear infinite;
       }
@@ -442,20 +429,30 @@
         border-radius: var(--radius);
         padding: 10px 12px;
         color: var(--muted);
-        background: rgb(17 24 39 / 60%);
+        background: var(--surface-2);
         font-size: 13px;
       }
 
       .status.success {
-        color: #bbf7d0;
+        color: #166534;
         border-color: rgb(34 197 94 / 34%);
-        background: var(--primary-soft);
+        background: rgb(22 163 74 / 9%);
       }
 
       .status.error {
-        color: #fecaca;
+        color: #991b1b;
         border-color: rgb(239 68 68 / 34%);
         background: var(--danger-soft);
+      }
+
+      .safety-note {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 10px 12px;
+        color: var(--muted);
+        background: #fff7f8;
+        font-size: 12px;
+        line-height: 1.55;
       }
 
       .parse-preview {
@@ -464,11 +461,11 @@
         border: 1px solid var(--border);
         border-radius: var(--radius);
         padding: 12px;
-        background: rgb(8 13 22 / 58%);
+        background: var(--surface-2);
       }
 
       .parse-preview code {
-        color: #cbd5e1;
+        color: var(--foreground);
         font:
           12px/1.5 "Fira Code",
           "SFMono-Regular",
@@ -485,11 +482,12 @@
       }
 
       .metric {
+        min-width: 0;
         min-height: 80px;
         border: 1px solid var(--border);
         border-radius: var(--radius);
         padding: 12px;
-        background: rgb(17 24 39 / 64%);
+        background: var(--surface-2);
       }
 
       .metric strong {
@@ -519,6 +517,7 @@
 
       .results-body {
         display: grid;
+        min-width: 0;
         gap: 14px;
         padding: 0 16px 16px;
       }
@@ -529,7 +528,7 @@
         border-radius: var(--radius);
         padding: 12px;
         color: var(--muted);
-        background: rgb(8 13 22 / 58%);
+        background: var(--surface-2);
       }
 
       .final-url.visible {
@@ -538,7 +537,7 @@
       }
 
       .final-url code {
-        color: #cbd5e1;
+        color: var(--foreground);
         font:
           12px/1.5 "Fira Code",
           "SFMono-Regular",
@@ -556,13 +555,13 @@
         padding: 28px;
         color: var(--muted);
         text-align: center;
-        background: rgb(8 13 22 / 44%);
+        background: var(--surface-2);
       }
 
       .empty strong {
         display: block;
         margin-bottom: 6px;
-        color: #e5e7eb;
+        color: var(--foreground);
         font-size: 16px;
       }
 
@@ -574,6 +573,7 @@
 
       .media-grid {
         display: none;
+        min-width: 0;
         grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
         gap: 12px;
       }
@@ -584,6 +584,7 @@
 
       .media-card {
         display: grid;
+        min-width: 0;
         gap: 10px;
         border: 1px solid var(--border);
         border-radius: var(--radius);
@@ -596,7 +597,7 @@
         overflow: hidden;
         border: 1px solid var(--border);
         border-radius: var(--radius);
-        background: linear-gradient(135deg, rgb(34 197 94 / 8%), rgb(56 189 248 / 8%)), #090f1a;
+        background: linear-gradient(135deg, rgb(225 29 72 / 8%), rgb(37 99 235 / 8%)), #f8fafc;
       }
 
       .preview img,
@@ -621,21 +622,27 @@
         font-weight: 800;
       }
 
+      .preview-fallback a {
+        color: var(--primary);
+        font-weight: 900;
+      }
+
       .type-badge {
         position: absolute;
         top: 8px;
         left: 8px;
-        border: 1px solid rgb(248 250 252 / 16%);
+        border: 1px solid rgb(15 23 42 / 10%);
         border-radius: var(--radius);
         padding: 4px 7px;
-        color: #e5e7eb;
-        background: rgb(7 11 18 / 76%);
+        color: var(--foreground);
+        background: rgb(255 255 255 / 88%);
         font-size: 11px;
         font-weight: 900;
       }
 
       .url-block {
         display: grid;
+        min-width: 0;
         gap: 4px;
       }
 
@@ -646,14 +653,18 @@
       }
 
       .url-block code {
+        display: block;
+        max-height: 5.9em;
         min-height: 42px;
-        color: #cbd5e1;
+        color: var(--foreground);
         font:
           12px/1.45 "Fira Code",
           "SFMono-Regular",
           Consolas,
           monospace;
+        overflow: auto;
         overflow-wrap: anywhere;
+        word-break: break-all;
       }
 
       .card-actions {
@@ -663,9 +674,10 @@
       }
 
       .json-panel {
+        min-width: 0;
         border: 1px solid var(--border);
         border-radius: var(--radius);
-        background: rgb(8 13 22 / 58%);
+        background: var(--surface-2);
       }
 
       .json-panel summary {
@@ -678,23 +690,21 @@
       }
 
       .raw {
+        max-width: 100%;
         max-height: 360px;
         margin: 0;
         border-top: 1px solid var(--border);
         padding: 12px;
-        color: #cbd5e1;
+        color: var(--foreground);
         overflow: auto;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        word-break: break-word;
         font:
           12px/1.6 "Fira Code",
           "SFMono-Regular",
           Consolas,
           monospace;
-      }
-
-      .footer-note {
-        margin-top: 16px;
-        color: var(--subtle);
-        font-size: 12px;
       }
 
       @keyframes spin {
@@ -872,6 +882,10 @@
             <div id="status" class="status" role="status" aria-live="polite">
               等待任务输入。请只处理你有权访问和保存的内容。
             </div>
+
+            <div class="safety-note">
+              安全边界：本工具只读取公开页面响应里的媒体元数据，不处理登录、验证码或私有内容。
+            </div>
           </form>
         </section>
 
@@ -932,10 +946,6 @@
           </div>
         </section>
       </section>
-
-      <p class="footer-note">
-        安全边界：本工具只读取公开页面响应里的媒体元数据，不处理登录、验证码或私有内容。
-      </p>
     </main>
 
     <script src="./config.js"></script>
@@ -1083,12 +1093,10 @@
         const items =
           Array.isArray(data.mediaItems) && data.mediaItems.length
             ? data.mediaItems
-            : lastUrls.map((url, index) => ({ url, type: "image", index }));
+            : lastUrls.map((url, index) => ({ url, type: inferMediaType(url), index }));
 
-        const imageCount = items.filter((item) => item.type === "image").length;
-        const videoCount = items.filter((item) =>
-          ["video", "livePhotoVideo"].includes(item.type),
-        ).length;
+        const imageCount = items.filter((item) => !isVideoItem(item)).length;
+        const videoCount = items.filter(isVideoItem).length;
 
         totalCountEl.textContent = String(lastUrls.length);
         imageCountEl.textContent = String(imageCount);
@@ -1136,17 +1144,39 @@
             );
           });
 
+          const video = card.querySelector("video");
+          if (video) {
+            video.addEventListener(
+              "error",
+              () => {
+                const preview = video.closest(".preview");
+                if (!preview) return;
+                preview.innerHTML = `
+                  <span class="type-badge">${getTypeLabel(item.type)}</span>
+                  <div class="preview-fallback">
+                    <a href="${escapeAttr(proxiedUrl)}" target="_blank" rel="noreferrer">打开视频</a>
+                  </div>
+                `;
+              },
+              { once: true },
+            );
+          }
+
           mediaGrid.appendChild(card);
         }
       }
 
       function renderMediaPreview(item, proxiedUrl, index) {
-        const typeLabel = getTypeLabel(item.type);
-        if (item.type === "video" || item.type === "livePhotoVideo") {
+        const typeLabel =
+          isVideoItem(item) && item.type !== "livePhotoVideo" ? "视频" : getTypeLabel(item.type);
+        if (isVideoItem(item)) {
+          const mimeType = getVideoMimeType(item);
           return `
             <div class="preview">
               <span class="type-badge">${typeLabel}</span>
-              <video src="${escapeAttr(proxiedUrl)}" controls preload="metadata" playsinline></video>
+              <video controls preload="metadata" playsinline crossorigin="anonymous">
+                <source src="${escapeAttr(proxiedUrl)}" type="${escapeAttr(mimeType)}" />
+              </video>
             </div>
           `;
         }
@@ -1173,7 +1203,8 @@
           setStatus(`正在下载 ${filename}...`, "idle");
           const response = await fetch(proxiedUrl);
           if (!response.ok) {
-            setStatus(`下载失败：HTTP ${response.status}`, "error");
+            const detail = await readErrorDetail(response);
+            setStatus(`下载失败：${detail || `HTTP ${response.status}`}`, "error");
             return;
           }
 
@@ -1190,6 +1221,16 @@
         } catch (error) {
           setStatus(error instanceof Error ? error.message : String(error), "error");
         }
+      }
+
+      async function readErrorDetail(response) {
+        try {
+          const data = await response.clone().json();
+          if (data?.error) return data.error;
+        } catch {
+          // Fall back to the status code below when the proxy did not return JSON.
+        }
+        return `HTTP ${response.status}`;
       }
 
       async function copyText(text, successMessage) {
@@ -1294,6 +1335,27 @@
         if (type === "livePhotoVideo") return "实况视频";
         if (type === "image") return "图片";
         return "资源";
+      }
+
+      function isVideoItem(item) {
+        return (
+          ["video", "livePhotoVideo"].includes(item?.type) || inferMediaType(item?.url) === "video"
+        );
+      }
+
+      function inferMediaType(url) {
+        const value = String(url || "").toLowerCase();
+        if (/\.(mp4|mov|m4v)(?:[?#]|$)/.test(value) || value.includes("sns-video")) {
+          return "video";
+        }
+        return "image";
+      }
+
+      function getVideoMimeType(item) {
+        const format = String(item?.filenameExtension || item?.format || "").toLowerCase();
+        if (format === "mov") return "video/quicktime";
+        if (format === "m4v") return "video/x-m4v";
+        return "video/mp4";
       }
 
       function escapeHtml(value) {
