@@ -22,7 +22,7 @@
 
 ## 环境要求
 
-- Node.js `>=20.11.0`
+- Node.js `>=22.0.0`
 - pnpm `>=10.0.0`
 - Cloudflare Wrangler
 
