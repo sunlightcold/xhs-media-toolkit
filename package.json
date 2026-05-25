@@ -1,0 +1,47 @@
+{
+  "name": "xhs-media-toolkit",
+  "version": "0.1.0",
+  "description": "用于从小红书公开页面提取无水印原图和视频资源，支持 Cloudflare Worker、CLI 和受限媒体代理。",
+  "license": "MIT",
+  "type": "module",
+  "packageManager": "pnpm@10.8.0",
+  "engines": {
+    "node": ">=20.11.0",
+    "pnpm": ">=10.0.0"
+  },
+  "keywords": [
+    "cloudflare-worker",
+    "xiaohongshu",
+    "xhs",
+    "media",
+    "typescript"
+  ],
+  "scripts": {
+    "check": "pnpm run typecheck",
+    "demo": "wrangler dev --local --assets public",
+    "extract": "tsx scripts/extract.ts",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "typecheck": "pnpm run types:generate && tsc --noEmit",
+    "types:generate": "wrangler types",
+    "verify": "pnpm run format:check && pnpm run check && pnpm run test",
+    "worker:dev": "wrangler dev",
+    "worker:deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.1",
+    "prettier": "^3.6.2",
+    "tsx": "^4.22.3",
+    "typescript": "^6.0.3",
+    "vitest": "^4.0.14",
+    "wrangler": "^4.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp",
+      "workerd"
+    ]
+  }
+}

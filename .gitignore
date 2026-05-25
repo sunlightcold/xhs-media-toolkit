@@ -1,0 +1,16 @@
+node_modules/
+.wrangler/
+dist/
+build/
+.cache/
+
+.env
+.env.*
+!.env.example
+.npmrc
+.yarnrc
+.yarnrc.yml
+worker-configuration.d.ts
+
+.DS_Store
+Thumbs.db
