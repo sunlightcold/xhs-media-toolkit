@@ -52,7 +52,7 @@ describe("handleProxyRequest", () => {
     expect(fetchImpl.mock.calls[0]?.[0]).toBe("https://sns-video-bd.xhscdn.com/video.mp4");
   });
 
-  it("proxies Xiaohongshu backup video CDN hosts", async () => {
+  it("proxies Xiaohongshu xhscdn.com subdomains", async () => {
     const fetchImpl = vi.fn<typeof fetch>().mockResolvedValue(
       new Response("media", {
         status: 206,
@@ -69,6 +69,21 @@ describe("handleProxyRequest", () => {
     expect(response.status).toBe(206);
     expect(response.headers.get("Content-Type")).toBe("video/mp4");
     expect(fetchImpl.mock.calls[0]?.[0]).toBe("https://sns-bak-v10.xhscdn.com/video.mp4");
+  });
+
+  it("rejects lookalike xhscdn hostnames", async () => {
+    for (const url of [
+      "https://evilxhscdn.com/video.mp4",
+      "https://xhscdn.com.evil.com/video.mp4",
+    ]) {
+      const target = encodeURIComponent(url);
+      const request = new Request(`https://worker.example/proxy?u=${target}`);
+
+      const response = await handleProxyRequest(request, new URL(request.url));
+
+      expect(response.status).toBe(403);
+      await expect(response.json()).resolves.toEqual({ error: "Host not allowed" });
+    }
   });
 
   it("rejects HTTP URLs on unsupported hosts", async () => {

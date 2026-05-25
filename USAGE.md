@@ -127,8 +127,7 @@ GET /proxy?u=<URL_ENCODED_MEDIA_URL>
 `u` 参数必须是 URL 编码后的 `https:` 媒体地址。Worker 只允许代理下面这些小红书媒体域名，防止接口变成开放代理：
 
 - `ci.xiaohongshu.com`
-- `sns-video-*.xhscdn.com`
-- `sns-bak-v*.xhscdn.com`
+- `xhscdn.com` 及其子域名
 
 视频播放通常会发送 `Range` 请求头，Worker 会转发该头，并在 CORS 中允许 `Range`。下载按钮这类无 `Range` 的视频请求会自动补 `Range: bytes=0-`，减少 CDN 返回 403 的情况。
 

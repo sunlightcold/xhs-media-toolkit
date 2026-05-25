@@ -107,8 +107,7 @@ Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:8787/extract" -ContentType
 `/proxy` 只允许代理 `https:` 协议下的以下媒体域名：
 
 - `ci.xiaohongshu.com`
-- `sns-video-*.xhscdn.com`
-- `sns-bak-v*.xhscdn.com`
+- `xhscdn.com` 及其子域名
 
 示例：
 
