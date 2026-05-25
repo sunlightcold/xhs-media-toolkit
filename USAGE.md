@@ -7,11 +7,7 @@
 
 请只用于你有权访问和保存的内容。这个 Worker 只读取公开页面响应里已有的媒体元数据，不绕过登录、验证码、权限控制或付费墙。
 
-在线演示页：
-
-```text
-https://sunlightcold.github.io/xhs-media-toolkit/
-```
+在线演示页：[https://sunlightcold.github.io/xhs-media-toolkit/](https://sunlightcold.github.io/xhs-media-toolkit/)
 
 ## 1. Worker 地址
 
@@ -212,11 +208,7 @@ pnpm run demo
 
 GitHub Pages 只负责部署静态演示页，不会部署 Cloudflare Worker。打开 Pages 后，需要在页面里的「Worker 地址」输入你自己的 Worker 地址。
 
-当前演示页地址：
-
-```text
-https://sunlightcold.github.io/xhs-media-toolkit/
-```
+当前演示页地址：[https://sunlightcold.github.io/xhs-media-toolkit/](https://sunlightcold.github.io/xhs-media-toolkit/)
 
 首次使用时，需要在 GitHub 仓库设置中启用 Pages，并将构建来源选择为 `GitHub Actions`：
 

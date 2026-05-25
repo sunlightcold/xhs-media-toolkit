@@ -4,11 +4,7 @@
 
 本项目有明确边界：不绕过登录、验证码、付费墙、权限控制、风控或任何私有内容边界。请只用于你有权访问和保存的内容。
 
-在线演示页：
-
-```text
-https://sunlightcold.github.io/xhs-media-toolkit/
-```
+在线演示页：[https://sunlightcold.github.io/xhs-media-toolkit/](https://sunlightcold.github.io/xhs-media-toolkit/)
 
 ## 功能
 
@@ -57,7 +53,7 @@ pnpm run extract -- "标题 http://xhslink.com/o/abc123 复制后打开【小红
 pnpm run demo
 ```
 
-GitHub Pages 演示页会发布 `public/` 目录，当前地址是 `https://sunlightcold.github.io/xhs-media-toolkit/`。Pages 只托管静态演示页，不部署 Worker；页面里的 Worker 地址需要填写你自己的 Worker 地址。
+GitHub Pages 演示页会发布 `public/` 目录，当前地址是 [https://sunlightcold.github.io/xhs-media-toolkit/](https://sunlightcold.github.io/xhs-media-toolkit/)。Pages 只托管静态演示页，不部署 Worker；页面里的 Worker 地址需要填写你自己的 Worker 地址。
 
 ## Worker 本地开发
 
