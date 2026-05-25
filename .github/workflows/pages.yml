@@ -51,6 +51,26 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      - name: Write runtime config
+        env:
+          WORKER_BASE_URL: ${{ vars.WORKER_BASE_URL }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          config = {
+              "workerBaseUrl": os.environ.get("WORKER_BASE_URL", "")
+          }
+          Path("public/config.js").write_text(
+              "window.XHS_MEDIA_TOOLKIT_CONFIG = "
+              + json.dumps(config, ensure_ascii=False)
+              + ";\n",
+              encoding="utf-8",
+          )
+          PY
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

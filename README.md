@@ -53,7 +53,7 @@ pnpm run extract -- "标题 http://xhslink.com/o/abc123 复制后打开【小红
 pnpm run demo
 ```
 
-GitHub Pages 演示页会发布 `public/` 目录，当前地址是 [https://sunlightcold.github.io/xhs-media-toolkit/](https://sunlightcold.github.io/xhs-media-toolkit/)。Pages 只托管静态演示页，不部署 Worker；页面里的 Worker 地址需要填写你自己的 Worker 地址。
+GitHub Pages 演示页会发布 `public/` 目录，当前地址是 [https://sunlightcold.github.io/xhs-media-toolkit/](https://sunlightcold.github.io/xhs-media-toolkit/)。Pages 只托管静态演示页，不部署 Worker；可以通过仓库变量 `WORKER_BASE_URL` 给页面注入默认 Worker 地址。
 
 ## Worker 本地开发
 

@@ -206,7 +206,7 @@ pnpm run demo
 
 仓库已提供 GitHub Actions 配置：`.github/workflows/pages.yml`。它会发布 `public/` 目录作为 GitHub Pages 演示页。
 
-GitHub Pages 只负责部署静态演示页，不会部署 Cloudflare Worker。打开 Pages 后，需要在页面里的「Worker 地址」输入你自己的 Worker 地址。
+GitHub Pages 只负责部署静态演示页，不会部署 Cloudflare Worker。可以通过仓库变量 `WORKER_BASE_URL` 给页面注入默认 Worker 地址；如果没有配置，页面会使用本地默认值 `http://127.0.0.1:8787`。
 
 当前演示页地址：[https://sunlightcold.github.io/xhs-media-toolkit/](https://sunlightcold.github.io/xhs-media-toolkit/)
 
@@ -217,6 +217,16 @@ Settings -> Pages -> Build and deployment -> Source -> GitHub Actions
 ```
 
 启用后，在 GitHub Actions 页面手动运行 `Pages` 工作流即可部署演示页。
+
+如果要让 Pages 自动填入 Worker 地址，在 GitHub 仓库设置里新增变量：
+
+```text
+Settings -> Secrets and variables -> Actions -> Variables -> New repository variable
+Name: WORKER_BASE_URL
+Value: https://<your-worker-domain>
+```
+
+修改变量后，重新手动运行 `Pages` 工作流即可生效。
 
 提交代码仍然使用：
 

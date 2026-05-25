@@ -348,6 +348,7 @@
       </section>
     </main>
 
+    <script src="./config.js"></script>
     <script>
       const form = document.querySelector("#extractForm");
       const workerBaseInput = document.querySelector("#workerBase");
@@ -363,6 +364,8 @@
       const raw = document.querySelector("#raw");
 
       let lastUrls = [];
+
+      applyRuntimeConfig();
 
       form.addEventListener("submit", async (event) => {
         event.preventDefault();
@@ -517,6 +520,14 @@
 
       function normalizeBaseUrl(value) {
         return value.trim().replace(/\/+$/, "");
+      }
+
+      function applyRuntimeConfig() {
+        const config = window.XHS_MEDIA_TOOLKIT_CONFIG || {};
+        const configuredWorkerBase = normalizeBaseUrl(config.workerBaseUrl || "");
+        if (configuredWorkerBase) {
+          workerBaseInput.value = configuredWorkerBase;
+        }
       }
 
       function setBusy(isBusy) {
