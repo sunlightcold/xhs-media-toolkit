@@ -202,19 +202,27 @@ pnpm run demo
 
 ## 6. GitHub Pages 部署
 
-仓库已提供 GitHub Actions 配置：`.github/workflows/pages.yml`。它会在推送到 `main` 时发布 `public/` 目录，因此演示页可以通过 git 提交和推送自动部署。
+仓库已提供 GitHub Actions 配置：`.github/workflows/pages.yml`。它会发布 `public/` 目录作为 GitHub Pages 演示页。
 
 GitHub Pages 只负责部署静态演示页，不会部署 Cloudflare Worker。打开 Pages 后，需要在页面里的「Worker 地址」输入你自己的 Worker 地址。
 
-首次使用时，在 GitHub 仓库设置中启用 Pages，并将构建来源选择为 `GitHub Actions`。之后执行：
+首次使用时，需要在 GitHub 仓库设置中启用 Pages，并将构建来源选择为 `GitHub Actions`：
+
+```text
+Settings -> Pages -> Build and deployment -> Source -> GitHub Actions
+```
+
+启用后，在 GitHub Actions 页面手动运行 `Pages` 工作流即可部署演示页。
+
+提交代码仍然使用：
 
 ```powershell
 git add .
-git commit -m "chore: prepare github pages demo"
+git commit -m "chore: update project"
 git push origin main
 ```
 
-推送后，GitHub Actions 会运行 `Pages` 工作流并部署 `public/index.html`。
+如果修改了演示页，再手动运行 `Pages` 工作流即可重新部署 `public/index.html`。
 
 ## 7. 常见问题
 

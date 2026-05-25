@@ -51,7 +51,7 @@ pnpm run extract -- "标题 http://xhslink.com/o/abc123 复制后打开【小红
 pnpm run demo
 ```
 
-GitHub Pages 演示页会发布 `public/` 目录。仓库启用 GitHub Pages 的 GitHub Actions 部署后，推送到 `main` 会自动部署。Pages 只托管静态演示页，不部署 Worker；页面里的 Worker 地址需要填写你自己的 Worker 地址。
+GitHub Pages 演示页会发布 `public/` 目录。首次使用时需要在仓库设置中启用 Pages，并选择 `GitHub Actions` 作为部署来源；之后可手动运行 `Pages` 工作流部署。Pages 只托管静态演示页，不部署 Worker；页面里的 Worker 地址需要填写你自己的 Worker 地址。
 
 ## Worker 本地开发
 
