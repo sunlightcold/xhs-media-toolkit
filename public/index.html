@@ -117,9 +117,9 @@
 
       .topbar {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(260px, auto);
+        grid-template-columns: minmax(0, 1fr) auto;
         gap: 22px;
-        align-items: end;
+        align-items: center;
         margin-bottom: 18px;
         border: 1px solid var(--border);
         border-radius: var(--radius);
@@ -191,37 +191,12 @@
       }
 
       .top-actions {
-        display: grid;
-        min-width: 0;
-        gap: 10px;
-        justify-items: end;
-      }
-
-      .header-status {
-        display: grid;
-        min-width: 240px;
-        gap: 5px;
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        padding: 12px;
-        background: rgb(255 255 255 / 76%);
-      }
-
-      .header-status strong {
-        color: var(--foreground);
-        font-size: 14px;
-      }
-
-      .header-status span {
-        color: var(--muted);
-        font-size: 12px;
-      }
-
-      .action-row {
         display: flex;
         flex-wrap: wrap;
-        justify-content: flex-end;
+        min-width: 0;
         gap: 10px;
+        justify-content: flex-end;
+        align-items: center;
       }
 
       .layout {
@@ -808,16 +783,6 @@
           padding: 16px;
         }
 
-        .top-actions {
-          justify-items: stretch;
-        }
-
-        .header-status,
-        .action-row {
-          width: 100%;
-          min-width: 0;
-        }
-
         .top-actions,
         .result-tools {
           justify-content: stretch;
@@ -873,21 +838,15 @@
           </div>
         </div>
         <div class="top-actions">
-          <div class="header-status" aria-label="服务状态">
-            <strong>Worker 在线解析</strong>
-            <span>公开笔记媒体元数据提取与受限代理</span>
-          </div>
-          <div class="action-row">
-            <a
-              class="button ghost"
-              href="https://github.com/sunlightcold/xhs-media-toolkit"
-              target="_blank"
-              rel="noreferrer"
-            >
-              GitHub
-            </a>
-            <a class="button ghost" href="./config.js" target="_blank" rel="noreferrer">配置</a>
-          </div>
+          <a class="button primary" href="#extractForm">开始使用</a>
+          <a
+            class="button ghost"
+            href="https://github.com/sunlightcold/xhs-media-toolkit"
+            target="_blank"
+            rel="noreferrer"
+          >
+            GitHub
+          </a>
         </div>
       </header>
 
