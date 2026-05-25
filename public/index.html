@@ -29,37 +29,52 @@
     <title>xhs-media-toolkit | 小红书原图与视频资源提取工具</title>
     <style>
       :root {
-        --bg: #10130f;
-        --bg-soft: #171d16;
-        --panel: rgb(250 246 229 / 92%);
-        --panel-deep: #e8dec5;
-        --ink: #171a14;
-        --muted: #68705f;
-        --line: rgb(23 26 20 / 14%);
-        --cream: #fff8dc;
-        --gold: #f0b84f;
-        --leaf: #89aa5d;
-        --red: #d95135;
-        --red-dark: #9c3425;
-        --cyan: #9bd9c7;
-        --shadow: 0 30px 90px rgb(0 0 0 / 36%);
+        color-scheme: dark;
+        --background: #070b12;
+        --surface: #0c111d;
+        --surface-2: #111827;
+        --surface-3: #172033;
+        --foreground: #f8fafc;
+        --muted: #9ca3af;
+        --subtle: #64748b;
+        --border: #253044;
+        --border-strong: #334155;
+        --primary: #22c55e;
+        --primary-strong: #16a34a;
+        --primary-soft: rgb(34 197 94 / 14%);
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --danger-soft: rgb(239 68 68 / 13%);
+        --info: #38bdf8;
+        --shadow: 0 20px 60px rgb(0 0 0 / 28%);
+        --radius: 8px;
       }
 
       * {
         box-sizing: border-box;
       }
 
+      html {
+        scroll-behavior: smooth;
+      }
+
       body {
         margin: 0;
         min-height: 100vh;
-        color: var(--cream);
-        font-family:
-          "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, "Noto Serif SC", serif;
+        color: var(--foreground);
         background:
-          radial-gradient(circle at 12% 12%, rgb(240 184 79 / 24%), transparent 28rem),
-          radial-gradient(circle at 78% 10%, rgb(137 170 93 / 22%), transparent 30rem),
-          radial-gradient(circle at 78% 82%, rgb(217 81 53 / 18%), transparent 32rem),
-          linear-gradient(135deg, #0d130f 0%, #182013 48%, #241611 100%);
+          linear-gradient(180deg, rgb(56 189 248 / 8%), transparent 360px),
+          linear-gradient(135deg, #070b12 0%, #0b1220 48%, #111827 100%);
+        font:
+          15px/1.55 Inter,
+          "Fira Sans",
+          "Noto Sans SC",
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
       }
 
       body::before {
@@ -69,10 +84,10 @@
         pointer-events: none;
         content: "";
         background-image:
-          linear-gradient(rgb(255 255 255 / 4%) 1px, transparent 1px),
-          linear-gradient(90deg, rgb(255 255 255 / 4%) 1px, transparent 1px);
-        background-size: 44px 44px;
-        mask-image: linear-gradient(to bottom, black, transparent 78%);
+          linear-gradient(rgb(148 163 184 / 6%) 1px, transparent 1px),
+          linear-gradient(90deg, rgb(148 163 184 / 6%) 1px, transparent 1px);
+        background-size: 40px 40px;
+        mask-image: linear-gradient(to bottom, black 0, transparent 72%);
       }
 
       button,
@@ -81,466 +96,684 @@
         font: inherit;
       }
 
-      .shell {
-        width: min(1220px, calc(100% - 32px));
-        margin: 0 auto;
-        padding: 34px 0 52px;
+      button,
+      a,
+      summary {
+        touch-action: manipulation;
       }
 
-      .nav {
-        display: flex;
+      a {
+        color: inherit;
+      }
+
+      .skip-link {
+        position: fixed;
+        top: 12px;
+        left: 12px;
+        z-index: 20;
+        transform: translateY(-140%);
+        border-radius: var(--radius);
+        padding: 10px 12px;
+        color: #04130a;
+        background: var(--primary);
+        text-decoration: none;
+        font-weight: 800;
+      }
+
+      .skip-link:focus {
+        transform: translateY(0);
+      }
+
+      .app {
+        width: min(1440px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 24px 0 40px;
+      }
+
+      .topbar {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 18px;
         align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        margin-bottom: 42px;
+        margin-bottom: 18px;
       }
 
       .brand {
-        display: inline-flex;
+        display: flex;
+        min-width: 0;
         align-items: center;
         gap: 12px;
-        color: var(--cream);
-        text-decoration: none;
       }
 
       .brand-mark {
         display: grid;
-        width: 42px;
-        height: 42px;
+        width: 40px;
+        height: 40px;
+        flex: 0 0 auto;
         place-items: center;
-        border: 1px solid rgb(255 248 220 / 22%);
-        border-radius: 15px;
-        color: #18120f;
-        background: linear-gradient(135deg, var(--gold), #f7df93);
-        box-shadow: 0 18px 50px rgb(240 184 79 / 18%);
+        border: 1px solid rgb(34 197 94 / 42%);
+        border-radius: var(--radius);
+        color: #04130a;
+        background: linear-gradient(135deg, #86efac, var(--primary));
+        box-shadow: 0 0 30px rgb(34 197 94 / 18%);
         font:
-          900 20px/1 ui-sans-serif,
-          system-ui,
-          sans-serif;
+          900 18px/1 "Fira Code",
+          "SFMono-Regular",
+          Consolas,
+          monospace;
       }
 
-      .brand-text {
-        display: grid;
-        gap: 2px;
-        font:
-          700 15px/1.1 ui-sans-serif,
-          system-ui,
-          sans-serif;
-      }
-
-      .brand-text small {
-        color: rgb(255 248 220 / 58%);
-        font-weight: 500;
-      }
-
-      .nav-links {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-
-      .nav-links a,
-      .chip {
-        display: inline-flex;
-        align-items: center;
-        min-height: 34px;
-        padding: 8px 12px;
-        border: 1px solid rgb(255 248 220 / 16%);
-        border-radius: 999px;
-        color: rgb(255 248 220 / 78%);
-        background: rgb(255 248 220 / 7%);
-        text-decoration: none;
-        font:
-          700 13px/1 ui-sans-serif,
-          system-ui,
-          sans-serif;
-      }
-
-      .hero {
-        display: grid;
-        grid-template-columns: minmax(0, 0.86fr) minmax(420px, 1fr);
-        gap: 26px;
-        align-items: start;
-      }
-
-      .copy {
-        display: grid;
-        gap: 22px;
-        padding-top: 18px;
-      }
-
-      .eyebrow {
-        width: fit-content;
-        color: var(--cyan);
-        font:
-          800 12px/1 ui-sans-serif,
-          system-ui,
-          sans-serif;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
+      .brand-copy {
+        min-width: 0;
       }
 
       h1 {
-        max-width: 600px;
         margin: 0;
-        color: #fff9e7;
-        font-size: clamp(34px, 4.1vw, 54px);
-        line-height: 1.04;
-        letter-spacing: -0.045em;
+        color: var(--foreground);
+        font-size: clamp(24px, 3.4vw, 38px);
+        line-height: 1.12;
+        letter-spacing: 0;
       }
 
-      .stats {
+      .brand-copy p {
+        margin: 5px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .top-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 10px;
+      }
+
+      .layout {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 12px;
-        max-width: 650px;
+        grid-template-columns: minmax(360px, 0.42fr) minmax(0, 1fr);
+        gap: 16px;
+        align-items: start;
       }
 
-      .stat {
-        min-height: 112px;
-        padding: 16px;
-        border: 1px solid rgb(255 248 220 / 14%);
-        border-radius: 24px;
-        background: rgb(255 248 220 / 7%);
-        backdrop-filter: blur(16px);
-      }
-
-      .stat strong {
-        display: block;
-        margin-bottom: 10px;
-        color: var(--gold);
-        font:
-          900 24px/1 ui-sans-serif,
-          system-ui,
-          sans-serif;
-      }
-
-      .stat span {
-        color: rgb(255 248 220 / 68%);
-        font:
-          700 13px/1.45 ui-sans-serif,
-          system-ui,
-          sans-serif;
-      }
-
-      .notice {
-        max-width: 650px;
-        padding: 16px 18px;
-        border: 1px solid rgb(155 217 199 / 22%);
-        border-radius: 22px;
-        color: rgb(255 248 220 / 72%);
-        background: rgb(155 217 199 / 8%);
-        font:
-          600 14px/1.7 ui-sans-serif,
-          system-ui,
-          sans-serif;
-      }
-
-      .console {
-        overflow: hidden;
-        border: 1px solid rgb(255 248 220 / 24%);
-        border-radius: 34px;
-        background: var(--panel);
+      .panel {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: rgb(12 17 29 / 86%);
         box-shadow: var(--shadow);
       }
 
-      .console-bar {
+      .panel-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 16px 16px 12px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .panel-title {
+        display: grid;
+        gap: 3px;
+      }
+
+      .panel-title strong {
+        color: var(--foreground);
+        font-size: 15px;
+      }
+
+      .panel-title span {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .badge {
+        display: inline-flex;
+        min-height: 28px;
+        align-items: center;
+        gap: 7px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 5px 9px;
+        color: var(--muted);
+        background: var(--surface-2);
+        font-size: 12px;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      .badge::before {
+        width: 7px;
+        height: 7px;
+        border-radius: 999px;
+        background: var(--subtle);
+        content: "";
+      }
+
+      .badge.ready::before {
+        background: var(--primary);
+        box-shadow: 0 0 0 4px var(--primary-soft);
+      }
+
+      .badge.error::before {
+        background: var(--danger);
+        box-shadow: 0 0 0 4px var(--danger-soft);
+      }
+
+      .field-stack {
+        display: grid;
+        gap: 14px;
+        padding: 16px;
+      }
+
+      .field {
+        display: grid;
+        gap: 7px;
+      }
+
+      .field-row {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 14px;
-        padding: 16px 18px;
-        color: var(--ink);
-        background: linear-gradient(135deg, #f8ecc8, #e5d6b7);
-        font:
-          800 13px/1 ui-sans-serif,
-          system-ui,
-          sans-serif;
+        gap: 10px;
       }
 
-      .lights {
-        display: flex;
-        gap: 8px;
+      label,
+      .label {
+        color: #e5e7eb;
+        font-size: 13px;
+        font-weight: 800;
       }
 
-      .lights span {
-        width: 11px;
-        height: 11px;
-        border-radius: 50%;
-      }
-
-      .lights span:nth-child(1) {
-        background: #d95135;
-      }
-
-      .lights span:nth-child(2) {
-        background: #f0b84f;
-      }
-
-      .lights span:nth-child(3) {
-        background: #89aa5d;
-      }
-
-      .form {
-        display: grid;
-        gap: 16px;
-        padding: 22px;
-      }
-
-      label {
-        display: grid;
-        gap: 8px;
-        color: var(--muted);
-        font:
-          800 13px/1.2 ui-sans-serif,
-          system-ui,
-          sans-serif;
+      .hint,
+      .counter {
+        color: var(--subtle);
+        font-size: 12px;
       }
 
       input,
       textarea {
         width: 100%;
-        border: 1px solid var(--line);
-        border-radius: 20px;
-        padding: 15px 16px;
-        color: var(--ink);
-        background: #fffaf0;
+        border: 1px solid var(--border-strong);
+        border-radius: var(--radius);
+        color: var(--foreground);
+        background: #080d16;
         outline: none;
-        font:
-          15px/1.55 "SFMono-Regular",
-          Consolas,
-          ui-monospace,
-          monospace;
+        transition:
+          border-color 160ms ease,
+          box-shadow 160ms ease,
+          background 160ms ease;
+      }
+
+      input {
+        min-height: 44px;
+        padding: 11px 12px;
       }
 
       textarea {
-        min-height: 150px;
+        min-height: 220px;
+        padding: 12px;
         resize: vertical;
       }
 
       input:focus,
-      textarea:focus {
-        border-color: rgb(217 81 53 / 72%);
-        box-shadow: 0 0 0 4px rgb(217 81 53 / 12%);
+      textarea:focus,
+      button:focus-visible,
+      a:focus-visible,
+      summary:focus-visible {
+        outline: 2px solid var(--primary);
+        outline-offset: 2px;
       }
 
-      .actions {
+      input:focus,
+      textarea:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px var(--primary-soft);
+      }
+
+      textarea::placeholder,
+      input::placeholder {
+        color: #64748b;
+      }
+
+      .advanced {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: rgb(17 24 39 / 52%);
+      }
+
+      .advanced summary {
+        min-height: 44px;
+        cursor: pointer;
+        padding: 11px 12px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .advanced .field {
+        padding: 0 12px 12px;
+      }
+
+      .toolbar {
         display: grid;
-        grid-template-columns: 1.4fr 1fr 1fr;
+        grid-template-columns: minmax(0, 1.2fr) 1fr;
         gap: 10px;
       }
 
-      button {
-        min-height: 46px;
-        border: 0;
-        border-radius: 999px;
-        padding: 12px 16px;
-        color: #fff8dc;
-        background: linear-gradient(135deg, var(--red), var(--red-dark));
+      .button {
+        display: inline-flex;
+        min-height: 44px;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: 1px solid transparent;
+        border-radius: var(--radius);
+        padding: 10px 13px;
         cursor: pointer;
-        font:
-          900 14px/1 ui-sans-serif,
-          system-ui,
-          sans-serif;
+        text-decoration: none;
+        transition:
+          transform 160ms ease,
+          background 160ms ease,
+          border-color 160ms ease,
+          color 160ms ease,
+          opacity 160ms ease;
+        font-size: 13px;
+        font-weight: 900;
       }
 
-      button:hover {
-        filter: brightness(1.04);
+      .button:hover {
         transform: translateY(-1px);
       }
 
-      button.secondary {
-        color: var(--ink);
-        background: #e8dec5;
+      .button:active {
+        transform: translateY(0);
       }
 
-      button:disabled {
+      .button.primary {
+        color: #03120a;
+        background: var(--primary);
+      }
+
+      .button.primary:hover {
+        background: #4ade80;
+      }
+
+      .button.secondary {
+        color: var(--foreground);
+        border-color: var(--border-strong);
+        background: var(--surface-3);
+      }
+
+      .button.ghost {
+        color: var(--muted);
+        border-color: var(--border);
+        background: transparent;
+      }
+
+      .button.danger {
+        color: #fecaca;
+        border-color: rgb(239 68 68 / 35%);
+        background: var(--danger-soft);
+      }
+
+      .button:disabled {
         cursor: not-allowed;
-        opacity: 0.54;
+        opacity: 0.48;
         transform: none;
       }
 
-      .status {
-        min-height: 24px;
-        color: #2f6c4b;
-        font:
-          700 14px/1.5 ui-sans-serif,
-          system-ui,
-          sans-serif;
-      }
-
-      .result-head {
+      .spinner {
         display: none;
-        align-items: center;
-        justify-content: space-between;
-        gap: 14px;
-        padding: 18px 22px;
-        border-top: 1px solid var(--line);
-        color: var(--ink);
-        background: rgb(232 222 197 / 62%);
+        width: 14px;
+        height: 14px;
+        border: 2px solid rgb(3 18 10 / 26%);
+        border-top-color: #03120a;
+        border-radius: 999px;
+        animation: spin 800ms linear infinite;
       }
 
-      .result-head.visible {
-        display: flex;
+      .is-busy .spinner {
+        display: inline-block;
       }
 
-      .result-head strong {
-        font:
-          900 20px/1.2 ui-sans-serif,
-          system-ui,
-          sans-serif;
-      }
-
-      #finalUrl {
-        max-width: 54%;
+      .status {
+        min-height: 42px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 10px 12px;
         color: var(--muted);
-        overflow-wrap: anywhere;
+        background: rgb(17 24 39 / 60%);
+        font-size: 13px;
+      }
+
+      .status.success {
+        color: #bbf7d0;
+        border-color: rgb(34 197 94 / 34%);
+        background: var(--primary-soft);
+      }
+
+      .status.error {
+        color: #fecaca;
+        border-color: rgb(239 68 68 / 34%);
+        background: var(--danger-soft);
+      }
+
+      .parse-preview {
+        display: grid;
+        gap: 8px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 12px;
+        background: rgb(8 13 22 / 58%);
+      }
+
+      .parse-preview code {
+        color: #cbd5e1;
         font:
-          700 12px/1.45 ui-monospace,
+          12px/1.5 "Fira Code",
+          "SFMono-Regular",
+          Consolas,
+          monospace;
+        overflow-wrap: anywhere;
+      }
+
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+        padding: 16px;
+      }
+
+      .metric {
+        min-height: 80px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 12px;
+        background: rgb(17 24 39 / 64%);
+      }
+
+      .metric strong {
+        display: block;
+        color: var(--foreground);
+        font:
+          900 26px/1 "Fira Code",
+          "SFMono-Regular",
+          Consolas,
           monospace;
       }
 
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-        gap: 14px;
-        padding: 22px;
+      .metric span {
+        display: block;
+        margin-top: 8px;
+        color: var(--subtle);
+        font-size: 12px;
+        font-weight: 800;
       }
 
-      .card {
+      .result-tools {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: flex-end;
+      }
+
+      .results-body {
+        display: grid;
+        gap: 14px;
+        padding: 0 16px 16px;
+      }
+
+      .final-url {
+        display: none;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 12px;
+        color: var(--muted);
+        background: rgb(8 13 22 / 58%);
+      }
+
+      .final-url.visible {
+        display: grid;
+        gap: 6px;
+      }
+
+      .final-url code {
+        color: #cbd5e1;
+        font:
+          12px/1.5 "Fira Code",
+          "SFMono-Regular",
+          Consolas,
+          monospace;
+        overflow-wrap: anywhere;
+      }
+
+      .empty {
+        display: grid;
+        min-height: 360px;
+        place-items: center;
+        border: 1px dashed var(--border-strong);
+        border-radius: var(--radius);
+        padding: 28px;
+        color: var(--muted);
+        text-align: center;
+        background: rgb(8 13 22 / 44%);
+      }
+
+      .empty strong {
+        display: block;
+        margin-bottom: 6px;
+        color: #e5e7eb;
+        font-size: 16px;
+      }
+
+      .empty p {
+        max-width: 420px;
+        margin: 0;
+        color: var(--subtle);
+      }
+
+      .media-grid {
+        display: none;
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+        gap: 12px;
+      }
+
+      .media-grid.visible {
+        display: grid;
+      }
+
+      .media-card {
         display: grid;
         gap: 10px;
-        border: 1px solid var(--line);
-        border-radius: 24px;
-        padding: 12px;
-        color: var(--ink);
-        background: #fffaf0;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 10px;
+        background: var(--surface-2);
       }
 
-      .card img,
-      .card video,
-      .media-fallback {
+      .preview {
+        position: relative;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: linear-gradient(135deg, rgb(34 197 94 / 8%), rgb(56 189 248 / 8%)), #090f1a;
+      }
+
+      .preview img,
+      .preview video,
+      .preview-fallback {
+        display: block;
         width: 100%;
         aspect-ratio: 1 / 1;
-        border-radius: 18px;
-        background: linear-gradient(135deg, rgb(23 26 20 / 8%), rgb(217 81 53 / 10%)), #eee3cc;
       }
 
-      .card img,
-      .card video {
+      .preview img,
+      .preview video {
         object-fit: contain;
       }
 
-      .media-fallback {
+      .preview-fallback {
         display: grid;
         place-items: center;
-        padding: 18px;
         color: var(--muted);
         text-align: center;
-        font:
-          900 14px/1.4 ui-sans-serif,
-          system-ui,
-          sans-serif;
+        font-size: 13px;
+        font-weight: 800;
       }
 
-      .card code {
-        display: block;
-        min-height: 44px;
-        color: var(--muted);
+      .type-badge {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        border: 1px solid rgb(248 250 252 / 16%);
+        border-radius: var(--radius);
+        padding: 4px 7px;
+        color: #e5e7eb;
+        background: rgb(7 11 18 / 76%);
+        font-size: 11px;
+        font-weight: 900;
+      }
+
+      .url-block {
+        display: grid;
+        gap: 4px;
+      }
+
+      .url-block span {
+        color: var(--subtle);
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .url-block code {
+        min-height: 42px;
+        color: #cbd5e1;
         font:
-          12px/1.45 ui-monospace,
+          12px/1.45 "Fira Code",
+          "SFMono-Regular",
+          Consolas,
           monospace;
         overflow-wrap: anywhere;
       }
 
       .card-actions {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 8px;
       }
 
-      .card-actions button,
-      .card-actions a {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 38px;
-        border-radius: 999px;
-        text-decoration: none;
-        font:
-          900 13px/1 ui-sans-serif,
-          system-ui,
-          sans-serif;
+      .json-panel {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: rgb(8 13 22 / 58%);
       }
 
-      .card-actions a {
-        color: var(--ink);
-        background: #e8dec5;
+      .json-panel summary {
+        min-height: 44px;
+        cursor: pointer;
+        padding: 11px 12px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 900;
       }
 
       .raw {
-        display: none;
+        max-height: 360px;
         margin: 0;
-        max-height: 380px;
-        padding: 20px 22px 24px;
-        border-top: 1px solid var(--line);
-        color: #464b3d;
-        background: #fffaf0;
+        border-top: 1px solid var(--border);
+        padding: 12px;
+        color: #cbd5e1;
         overflow: auto;
         font:
-          12px/1.6 ui-monospace,
+          12px/1.6 "Fira Code",
+          "SFMono-Regular",
+          Consolas,
           monospace;
       }
 
-      .raw.visible {
-        display: block;
+      .footer-note {
+        margin-top: 16px;
+        color: var(--subtle);
+        font-size: 12px;
       }
 
-      @media (max-width: 980px) {
-        .hero {
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          transition-duration: 0.01ms !important;
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+        }
+      }
+
+      @media (max-width: 1040px) {
+        .layout {
           grid-template-columns: 1fr;
         }
 
-        .copy {
-          padding-top: 0;
+        .input-panel {
+          position: static;
         }
       }
 
-      @media (max-width: 680px) {
-        .shell {
-          width: min(100% - 20px, 1220px);
-          padding-top: 20px;
+      @media (min-width: 1041px) {
+        .input-panel {
+          position: sticky;
+          top: 16px;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .app {
+          width: min(100% - 20px, 1440px);
+          padding-top: 14px;
         }
 
-        .nav {
-          align-items: flex-start;
-          flex-direction: column;
-          margin-bottom: 30px;
-        }
-
-        .stats,
-        .actions {
+        .topbar,
+        .panel-header {
           grid-template-columns: 1fr;
         }
 
-        .form,
-        .grid,
-        .result-head {
-          padding: 16px;
+        .topbar {
+          align-items: stretch;
         }
 
-        .result-head {
-          align-items: flex-start;
-          flex-direction: column;
+        .top-actions,
+        .result-tools {
+          justify-content: stretch;
         }
 
-        #finalUrl {
-          max-width: 100%;
+        .top-actions .button,
+        .result-tools .button,
+        .toolbar .button {
+          width: 100%;
+        }
+
+        .toolbar,
+        .metrics {
+          grid-template-columns: 1fr;
+        }
+
+        .card-actions {
+          grid-template-columns: 1fr;
+        }
+
+        textarea {
+          min-height: 180px;
         }
       }
     </style>
   </head>
   <body>
+    <a class="skip-link" href="#extractForm">跳到提取表单</a>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -553,149 +786,268 @@
         "license": "https://github.com/sunlightcold/xhs-media-toolkit/blob/main/LICENSE"
       }
     </script>
-    <main class="shell">
-      <nav class="nav" aria-label="页面导航">
-        <a class="brand" href="https://github.com/sunlightcold/xhs-media-toolkit" rel="noreferrer">
-          <span class="brand-mark">X</span>
-          <span class="brand-text">
-            xhs-media-toolkit
-            <small>Cloudflare Worker Media Console</small>
-          </span>
-        </a>
-        <div class="nav-links">
-          <a href="https://github.com/sunlightcold/xhs-media-toolkit" rel="noreferrer">GitHub</a>
-          <span class="chip">公开页面元数据</span>
-        </div>
-      </nav>
-
-      <section class="hero">
-        <div class="copy">
-          <span class="eyebrow">public media metadata extractor</span>
-          <h1>提取小红书公开页面里的原图与视频资源。</h1>
-
-          <div class="stats" aria-label="能力概览">
-            <div class="stat">
-              <strong>01</strong>
-              <span>提取无水印原图与视频资源地址</span>
-            </div>
-            <div class="stat">
-              <strong>02</strong>
-              <span>只代理允许的小红书媒体域名</span>
-            </div>
-            <div class="stat">
-              <strong>03</strong>
-              <span>不处理登录、验证码或私有内容</span>
-            </div>
-          </div>
-
-          <div class="notice">
-            安全边界：本工具只读取公开页面响应里的媒体元数据。请只用于你有权访问和保存的内容。
+    <main class="app">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">X</span>
+          <div class="brand-copy">
+            <h1>小红书媒体提取工作台</h1>
+            <p>面向公开笔记的原图、视频资源解析与批量下载。</p>
           </div>
         </div>
+        <div class="top-actions">
+          <a
+            class="button ghost"
+            href="https://github.com/sunlightcold/xhs-media-toolkit"
+            target="_blank"
+            rel="noreferrer"
+          >
+            GitHub
+          </a>
+          <a class="button ghost" href="./config.js" target="_blank" rel="noreferrer">配置</a>
+        </div>
+      </header>
 
-        <section class="console" aria-label="媒体提取表单">
-          <div class="console-bar">
-            <div class="lights" aria-hidden="true">
-              <span></span>
-              <span></span>
-              <span></span>
+      <section class="layout" aria-label="媒体提取工作区">
+        <section class="panel input-panel" aria-label="提取任务">
+          <div class="panel-header">
+            <div class="panel-title">
+              <strong>提取任务</strong>
+              <span>粘贴分享文本或笔记 URL 后运行</span>
             </div>
-            <span>Worker 操作台</span>
+            <span id="healthBadge" class="badge ready">就绪</span>
           </div>
 
-          <form id="extractForm" class="form">
-            <label>
-              Worker 地址
-              <input
-                id="workerBase"
-                value="https://xhs-media-toolkit.zscagame.workers.dev"
-                spellcheck="false"
-              />
-            </label>
-
-            <label>
-              分享文本或笔记 URL
+          <form id="extractForm" class="field-stack">
+            <div class="field">
+              <div class="field-row">
+                <label for="shareText">分享文本或笔记 URL</label>
+                <span id="charCount" class="counter">0 字符</span>
+              </div>
               <textarea
                 id="shareText"
                 spellcheck="false"
-                placeholder="粘贴你有权访问和保存的小红书分享文本或笔记 URL"
+                autocomplete="off"
+                placeholder="https://www.xiaohongshu.com/explore/..."
+                required
               ></textarea>
-            </label>
-
-            <div class="actions">
-              <button id="extractButton" type="submit">提取媒体地址</button>
-              <button id="copyButton" class="secondary" type="button" disabled>复制全部 URL</button>
-              <button id="clearButton" class="secondary" type="button">清空结果</button>
+              <span class="hint">支持 xhslink.com 与 www.xiaohongshu.com 公开页面。</span>
             </div>
-            <span id="status" class="status"></span>
-          </form>
 
-          <div id="resultHead" class="result-head">
-            <strong id="summary">等待提取</strong>
-            <span id="finalUrl"></span>
+            <div id="parsePreview" class="parse-preview" aria-live="polite">
+              <span class="label">识别结果</span>
+              <code id="detectedUrl">等待输入</code>
+            </div>
+
+            <details class="advanced">
+              <summary>Worker 设置</summary>
+              <div class="field">
+                <label for="workerBase">Worker 地址</label>
+                <input
+                  id="workerBase"
+                  type="url"
+                  value="https://xhs-media-toolkit.zscagame.workers.dev"
+                  spellcheck="false"
+                  autocomplete="url"
+                  required
+                />
+              </div>
+            </details>
+
+            <div class="toolbar">
+              <button id="extractButton" class="button primary" type="submit">
+                <span id="buttonSpinner" class="spinner" aria-hidden="true"></span>
+                <span id="extractButtonText">开始提取</span>
+              </button>
+              <button id="pasteButton" class="button secondary" type="button">粘贴剪贴板</button>
+            </div>
+
+            <div class="toolbar">
+              <button id="copyButton" class="button secondary" type="button" disabled>
+                复制全部 URL
+              </button>
+              <button id="clearButton" class="button danger" type="button">清空</button>
+            </div>
+
+            <div id="status" class="status" role="status" aria-live="polite">
+              等待任务输入。请只处理你有权访问和保存的内容。
+            </div>
+          </form>
+        </section>
+
+        <section class="panel" aria-label="提取结果">
+          <div class="panel-header">
+            <div class="panel-title">
+              <strong>结果</strong>
+              <span id="resultSubtitle">资源预览、复制与下载</span>
+            </div>
+            <div class="result-tools">
+              <button id="copyJsonButton" class="button ghost" type="button" disabled>
+                复制 JSON
+              </button>
+              <button id="openFinalButton" class="button ghost" type="button" disabled>
+                打开笔记
+              </button>
+            </div>
           </div>
 
-          <div id="grid" class="grid"></div>
-          <pre id="raw" class="raw"></pre>
+          <div class="metrics" aria-label="结果统计">
+            <div class="metric">
+              <strong id="totalCount">0</strong>
+              <span>资源</span>
+            </div>
+            <div class="metric">
+              <strong id="imageCount">0</strong>
+              <span>图片</span>
+            </div>
+            <div class="metric">
+              <strong id="videoCount">0</strong>
+              <span>视频</span>
+            </div>
+            <div class="metric">
+              <strong id="noteCount">0</strong>
+              <span>笔记对象</span>
+            </div>
+          </div>
+
+          <div class="results-body">
+            <div id="finalUrl" class="final-url">
+              <span class="label">最终笔记地址</span>
+              <code id="finalUrlText"></code>
+            </div>
+
+            <div id="emptyState" class="empty">
+              <div>
+                <strong>暂无结果</strong>
+                <p>运行提取后，图片和视频会以资源卡片展示在这里。</p>
+              </div>
+            </div>
+
+            <div id="mediaGrid" class="media-grid"></div>
+
+            <details id="jsonPanel" class="json-panel">
+              <summary>响应 JSON</summary>
+              <pre id="raw" class="raw">暂无数据</pre>
+            </details>
+          </div>
         </section>
       </section>
+
+      <p class="footer-note">
+        安全边界：本工具只读取公开页面响应里的媒体元数据，不处理登录、验证码或私有内容。
+      </p>
     </main>
 
     <script src="./config.js"></script>
     <script>
+      const XHS_LINK_RE =
+        /https?:\/\/(?:xhslink\.com|www\.xiaohongshu\.com)\/[^\s"'<>\\^`{|}，。；！？、【】《》]+/i;
+
       const form = document.querySelector("#extractForm");
       const workerBaseInput = document.querySelector("#workerBase");
       const shareTextInput = document.querySelector("#shareText");
       const extractButton = document.querySelector("#extractButton");
+      const extractButtonText = document.querySelector("#extractButtonText");
+      const pasteButton = document.querySelector("#pasteButton");
       const copyButton = document.querySelector("#copyButton");
+      const copyJsonButton = document.querySelector("#copyJsonButton");
+      const openFinalButton = document.querySelector("#openFinalButton");
       const clearButton = document.querySelector("#clearButton");
       const statusEl = document.querySelector("#status");
-      const resultHead = document.querySelector("#resultHead");
-      const summaryEl = document.querySelector("#summary");
-      const finalUrlEl = document.querySelector("#finalUrl");
-      const grid = document.querySelector("#grid");
+      const healthBadge = document.querySelector("#healthBadge");
+      const detectedUrlEl = document.querySelector("#detectedUrl");
+      const charCountEl = document.querySelector("#charCount");
+      const resultSubtitle = document.querySelector("#resultSubtitle");
+      const totalCountEl = document.querySelector("#totalCount");
+      const imageCountEl = document.querySelector("#imageCount");
+      const videoCountEl = document.querySelector("#videoCount");
+      const noteCountEl = document.querySelector("#noteCount");
+      const finalUrl = document.querySelector("#finalUrl");
+      const finalUrlText = document.querySelector("#finalUrlText");
+      const emptyState = document.querySelector("#emptyState");
+      const mediaGrid = document.querySelector("#mediaGrid");
       const raw = document.querySelector("#raw");
 
       let lastUrls = [];
+      let lastJson = "";
+      let lastFinalUrl = "";
 
       applyRuntimeConfig();
+      hydrateFromStorage();
+      updateDetectedUrl();
 
       form.addEventListener("submit", async (event) => {
         event.preventDefault();
         await extractUrls();
       });
 
+      shareTextInput.addEventListener("input", updateDetectedUrl);
+
+      workerBaseInput.addEventListener("change", () => {
+        localStorage.setItem(
+          "xhs-media-toolkit.workerBase",
+          normalizeBaseUrl(workerBaseInput.value),
+        );
+      });
+
+      pasteButton.addEventListener("click", async () => {
+        try {
+          const text = await navigator.clipboard.readText();
+          if (!text) {
+            setStatus("剪贴板没有可粘贴的文本", "error");
+            return;
+          }
+          shareTextInput.value = text;
+          updateDetectedUrl();
+          setStatus("已粘贴剪贴板文本", "success");
+        } catch {
+          setStatus("浏览器未允许读取剪贴板，请手动粘贴", "error");
+        }
+      });
+
       copyButton.addEventListener("click", async () => {
         if (!lastUrls.length) return;
-        try {
-          await navigator.clipboard.writeText(lastUrls.join("\n"));
-          setStatus(`已复制 ${lastUrls.length} 个地址`);
-        } catch {
-          setStatus("复制失败，请手动复制下方 JSON 中的 urls 字段", true);
+        await copyText(lastUrls.join("\n"), `已复制 ${lastUrls.length} 个资源 URL`);
+      });
+
+      copyJsonButton.addEventListener("click", async () => {
+        if (!lastJson) return;
+        await copyText(lastJson, "已复制响应 JSON");
+      });
+
+      openFinalButton.addEventListener("click", () => {
+        if (lastFinalUrl) {
+          window.open(lastFinalUrl, "_blank", "noopener,noreferrer");
         }
       });
 
       clearButton.addEventListener("click", () => {
-        lastUrls = [];
-        grid.innerHTML = "";
-        raw.textContent = "";
-        raw.classList.remove("visible");
-        resultHead.classList.remove("visible");
-        copyButton.disabled = true;
-        setStatus("结果已清空");
+        resetResults();
+        shareTextInput.value = "";
+        updateDetectedUrl();
+        setStatus("已清空任务与结果", "idle");
+        shareTextInput.focus();
       });
 
       async function extractUrls() {
         const workerBase = normalizeBaseUrl(workerBaseInput.value);
         const shareText = shareTextInput.value.trim();
+        const detectedUrl = extractShareUrl(shareText);
 
-        if (!workerBase || !shareText) {
-          setStatus("请先填写 Worker 地址和分享文本", true);
+        if (!workerBase) {
+          setStatus("请填写 Worker 地址", "error");
+          workerBaseInput.focus();
+          return;
+        }
+
+        if (!detectedUrl) {
+          setStatus("没有识别到有效的小红书公开链接", "error");
+          shareTextInput.focus();
           return;
         }
 
         setBusy(true);
-        setStatus("正在请求 Worker...");
+        setStatus("正在请求 Worker 并解析页面...", "idle");
 
         try {
           const response = await fetch(`${workerBase}/extract`, {
@@ -710,43 +1062,73 @@
           }
 
           lastUrls = Array.isArray(data.urls) ? data.urls : [];
+          lastJson = JSON.stringify(data, null, 2);
+          lastFinalUrl = typeof data.finalNoteUrl === "string" ? data.finalNoteUrl : "";
           renderResult(data, workerBase);
-          setStatus(`完成，提取到 ${lastUrls.length} 个资源`);
+          setStatus(`完成，提取到 ${lastUrls.length} 个资源`, "success");
         } catch (error) {
-          setStatus(error instanceof Error ? error.message : String(error), true);
+          setStatus(error instanceof Error ? error.message : String(error), "error");
         } finally {
           setBusy(false);
         }
       }
 
       function renderResult(data, workerBase) {
-        grid.innerHTML = "";
+        mediaGrid.innerHTML = "";
         copyButton.disabled = lastUrls.length === 0;
-        resultHead.classList.add("visible");
-        summaryEl.textContent = `提取到 ${lastUrls.length} 个资源`;
-        finalUrlEl.textContent = data.finalNoteUrl || "";
-        raw.textContent = JSON.stringify(data, null, 2);
-        raw.classList.add("visible");
+        copyJsonButton.disabled = !lastJson;
+        openFinalButton.disabled = !lastFinalUrl;
+        raw.textContent = lastJson || "暂无数据";
 
         const items =
           Array.isArray(data.mediaItems) && data.mediaItems.length
             ? data.mediaItems
             : lastUrls.map((url, index) => ({ url, type: "image", index }));
 
+        const imageCount = items.filter((item) => item.type === "image").length;
+        const videoCount = items.filter((item) =>
+          ["video", "livePhotoVideo"].includes(item.type),
+        ).length;
+
+        totalCountEl.textContent = String(lastUrls.length);
+        imageCountEl.textContent = String(imageCount);
+        videoCountEl.textContent = String(videoCount);
+        noteCountEl.textContent = String(data.noteCount || 0);
+        resultSubtitle.textContent = lastUrls.length ? "资源已就绪" : "未解析到媒体资源";
+
+        if (lastFinalUrl) {
+          finalUrl.classList.add("visible");
+          finalUrlText.textContent = lastFinalUrl;
+        } else {
+          finalUrl.classList.remove("visible");
+          finalUrlText.textContent = "";
+        }
+
+        emptyState.style.display = lastUrls.length ? "none" : "grid";
+        mediaGrid.classList.toggle("visible", lastUrls.length > 0);
+
         for (const [index, item] of items.entries()) {
           const proxiedUrl = `${workerBase}/proxy?u=${encodeURIComponent(item.url)}`;
           const card = document.createElement("article");
-          card.className = "card";
+          card.className = "media-card";
           card.innerHTML = `
             ${renderMediaPreview(item, proxiedUrl, index)}
-            <code>${escapeHtml(item.url)}</code>
+            <div class="url-block">
+              <span>源地址</span>
+              <code>${escapeHtml(item.url)}</code>
+            </div>
             <div class="card-actions">
-              <a href="${escapeAttr(proxiedUrl)}" target="_blank" rel="noreferrer">打开</a>
-              <button type="button">下载</button>
+              <a class="button ghost" href="${escapeAttr(proxiedUrl)}" target="_blank" rel="noreferrer">打开</a>
+              <button class="button secondary" type="button" data-action="copy">复制</button>
+              <button class="button primary" type="button" data-action="download">下载</button>
             </div>
           `;
 
-          card.querySelector("button").addEventListener("click", () => {
+          card.querySelector('[data-action="copy"]').addEventListener("click", async () => {
+            await copyText(item.url, "已复制当前资源 URL");
+          });
+
+          card.querySelector('[data-action="download"]').addEventListener("click", () => {
             const extension = item.filenameExtension || item.format || "bin";
             void downloadViaWorker(
               proxiedUrl,
@@ -754,35 +1136,44 @@
             );
           });
 
-          grid.appendChild(card);
+          mediaGrid.appendChild(card);
         }
       }
 
       function renderMediaPreview(item, proxiedUrl, index) {
+        const typeLabel = getTypeLabel(item.type);
         if (item.type === "video" || item.type === "livePhotoVideo") {
           return `
-            <video
-              src="${escapeAttr(proxiedUrl)}"
-              controls
-              preload="metadata"
-              playsinline
-            ></video>
+            <div class="preview">
+              <span class="type-badge">${typeLabel}</span>
+              <video src="${escapeAttr(proxiedUrl)}" controls preload="metadata" playsinline></video>
+            </div>
           `;
         }
 
         if (item.type === "image") {
-          return `<img src="${escapeAttr(proxiedUrl)}" referrerpolicy="no-referrer" alt="资源 ${index + 1}" />`;
+          return `
+            <div class="preview">
+              <span class="type-badge">${typeLabel}</span>
+              <img src="${escapeAttr(proxiedUrl)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" alt="资源 ${index + 1}" />
+            </div>
+          `;
         }
 
-        return `<div class="media-fallback">资源 ${index + 1}</div>`;
+        return `
+          <div class="preview">
+            <span class="type-badge">${typeLabel}</span>
+            <div class="preview-fallback">资源 ${index + 1}</div>
+          </div>
+        `;
       }
 
       async function downloadViaWorker(proxiedUrl, filename) {
         try {
-          setStatus(`正在下载 ${filename}...`);
+          setStatus(`正在下载 ${filename}...`, "idle");
           const response = await fetch(proxiedUrl);
           if (!response.ok) {
-            setStatus(`下载失败：HTTP ${response.status}`, true);
+            setStatus(`下载失败：HTTP ${response.status}`, "error");
             return;
           }
 
@@ -795,9 +1186,18 @@
           anchor.click();
           anchor.remove();
           URL.revokeObjectURL(objectUrl);
-          setStatus(`已触发下载 ${anchor.download}`);
+          setStatus(`已触发下载 ${filename}`, "success");
         } catch (error) {
-          setStatus(error instanceof Error ? error.message : String(error), true);
+          setStatus(error instanceof Error ? error.message : String(error), "error");
+        }
+      }
+
+      async function copyText(text, successMessage) {
+        try {
+          await navigator.clipboard.writeText(text);
+          setStatus(successMessage, "success");
+        } catch {
+          setStatus("复制失败，请手动复制页面中的文本", "error");
         }
       }
 
@@ -809,6 +1209,41 @@
             error: `Worker 返回了非 JSON 响应：HTTP ${response.status}`,
           };
         }
+      }
+
+      function resetResults() {
+        lastUrls = [];
+        lastJson = "";
+        lastFinalUrl = "";
+        mediaGrid.innerHTML = "";
+        raw.textContent = "暂无数据";
+        totalCountEl.textContent = "0";
+        imageCountEl.textContent = "0";
+        videoCountEl.textContent = "0";
+        noteCountEl.textContent = "0";
+        resultSubtitle.textContent = "资源预览、复制与下载";
+        finalUrl.classList.remove("visible");
+        finalUrlText.textContent = "";
+        emptyState.style.display = "grid";
+        mediaGrid.classList.remove("visible");
+        copyButton.disabled = true;
+        copyJsonButton.disabled = true;
+        openFinalButton.disabled = true;
+      }
+
+      function updateDetectedUrl() {
+        const text = shareTextInput.value;
+        const detectedUrl = extractShareUrl(text);
+        charCountEl.textContent = `${text.length} 字符`;
+        detectedUrlEl.textContent = detectedUrl || "等待输入";
+        healthBadge.textContent = detectedUrl ? "已识别" : "就绪";
+        healthBadge.className = detectedUrl ? "badge ready" : "badge";
+      }
+
+      function extractShareUrl(shareText) {
+        if (!shareText || typeof shareText !== "string") return "";
+        const match = shareText.match(XHS_LINK_RE);
+        return match ? match[0].replace(/[),.;!?，。；！？、】》]+$/g, "") : "";
       }
 
       function normalizeBaseUrl(value) {
@@ -823,14 +1258,42 @@
         }
       }
 
-      function setBusy(isBusy) {
-        extractButton.disabled = isBusy;
-        extractButton.textContent = isBusy ? "提取中..." : "提取媒体地址";
+      function hydrateFromStorage() {
+        const storedWorkerBase = normalizeBaseUrl(
+          localStorage.getItem("xhs-media-toolkit.workerBase") || "",
+        );
+        if (storedWorkerBase) {
+          workerBaseInput.value = storedWorkerBase;
+        }
       }
 
-      function setStatus(message, isError = false) {
+      function setBusy(isBusy) {
+        document.body.classList.toggle("is-busy", isBusy);
+        extractButton.disabled = isBusy;
+        pasteButton.disabled = isBusy;
+        extractButtonText.textContent = isBusy ? "提取中" : "开始提取";
+      }
+
+      function setStatus(message, tone = "idle") {
         statusEl.textContent = message;
-        statusEl.style.color = isError ? "#9c3425" : "#2f6c4b";
+        statusEl.className = `status ${tone === "idle" ? "" : tone}`.trim();
+        healthBadge.classList.toggle("error", tone === "error");
+        if (tone === "error") {
+          healthBadge.textContent = "异常";
+        } else if (!extractShareUrl(shareTextInput.value)) {
+          healthBadge.textContent = "就绪";
+          healthBadge.className = "badge";
+        } else {
+          healthBadge.textContent = "已识别";
+          healthBadge.className = "badge ready";
+        }
+      }
+
+      function getTypeLabel(type) {
+        if (type === "video") return "视频";
+        if (type === "livePhotoVideo") return "实况视频";
+        if (type === "image") return "图片";
+        return "资源";
       }
 
       function escapeHtml(value) {
